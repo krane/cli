@@ -13,7 +13,7 @@ export default class Deploy extends Command {
   ];
 
   async run() {
-    const endpoint = "localhost:8080";
+    const endpoint = "http://localhost:8000";
 
     const kraneClient = createClient(endpoint);
 
@@ -23,7 +23,7 @@ export default class Deploy extends Command {
     const configFilePath = path.resolve(appPath, "krane.json");
 
     const contents = await (await readFile(configFilePath)).toString();
-    
+
     const projectConfig: KraneProjectSpec = JSON.parse(contents);
     projectConfig.config.tag = args.tag;
 
