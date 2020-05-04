@@ -1,4 +1,9 @@
 import { Command } from "@oclif/command";
+import * as fs from "fs";
+import * as path from "path";
+import * as util from "util";
+import { createClient, KraneProjectSpec } from "../apiClient";
+const readFile = util.promisify(fs.readFile);
 
 export default class Deploy extends Command {
   static description = "Deploy this app";
@@ -8,10 +13,22 @@ export default class Deploy extends Command {
   ];
 
   async run() {
+    const endpoint = "localhost:8080";
+
+    const kraneClient = createClient(endpoint);
+
     const { args } = this.parse(Deploy);
 
-    // Get krane.json file
+    const appPath = path.resolve(".");
+    const configFilePath = path.resolve(appPath, "krane.json");
 
-    console.log("Deploying " + args.tag);
+    const contents = await (await readFile(configFilePath)).toString();
+    
+    const projectConfig: KraneProjectSpec = JSON.parse(contents);
+    projectConfig.config.tag = args.tag;
+
+    let res = await kraneClient.deploy(projectConfig);
+
+    console.log("Deploying ", res);
   }
 }
