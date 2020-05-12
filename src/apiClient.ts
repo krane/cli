@@ -15,6 +15,30 @@ export class KraneAPI {
   async deploy(config: KraneProjectSpec) {
     return this.client.post("/deploy", config).then((res) => res.data);
   }
+
+  async login() {
+    return this.client.get<LoginGetResponse>("/login").then((res) => res.data);
+  }
+
+  async auth(request_id: string, token: string) {
+    return this.client
+      .post<AuthPostResponse>("/login", {
+        body: {
+          request_id,
+          token,
+        },
+      })
+      .then((res) => res.data);
+  }
+}
+
+interface LoginGetResponse {
+  request_id: string;
+  phrase: string;
+}
+
+interface AuthPostResponse {
+  token: string;
 }
 
 interface ProjectSpecConfig {

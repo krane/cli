@@ -11,10 +11,14 @@
     "@oclif/config": "^1.15.1",
     "@oclif/plugin-help": "^2.2.3",
     "axios": "^0.19.2",
+    "inquirer": "^7.1.0",
+    "jsonwebtoken": "^8.5.1",
     "tslib": "^1.11.1"
   },
   "devDependencies": {
     "@oclif/dev-cli": "^1.22.2",
+    "@types/inquirer": "^6.5.0",
+    "@types/jsonwebtoken": "^8.3.9",
     "@types/node": "^10.17.21",
     "eslint": "^5.16.0",
     "eslint-config-oclif": "^3.1.0",
