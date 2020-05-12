@@ -17,28 +17,36 @@ export class KraneAPI {
   }
 
   async login() {
-    return this.client.get<LoginGetResponse>("/login").then((res) => res.data);
+    return this.client
+      .get<LoginGetResponse>("/login")
+      .then((res) => res.data)
+      .then((res) => res.data);
   }
 
   async auth(request_id: string, token: string) {
     return this.client
-      .post<AuthPostResponse>("/login", {
-        body: {
-          request_id,
-          token,
-        },
-      })
+      .post<AuthPostResponse>("/login", { request_id, token })
+      .then((res) => res.data)
       .then((res) => res.data);
   }
 }
 
 interface LoginGetResponse {
-  request_id: string;
-  phrase: string;
+  code: number;
+  data: {
+    request_id: string;
+    phrase: string;
+  };
+  success: boolean;
 }
 
 interface AuthPostResponse {
-  token: string;
+  code: number;
+  data: {
+    token: string;
+    expires_at: string;
+  }
+  success: boolean;
 }
 
 interface ProjectSpecConfig {

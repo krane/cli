@@ -28,7 +28,10 @@ export default class Login extends Command {
 
     const endpoint = "http://localhost:8080";
     const kraneClient = createClient(endpoint);
+
     const { phrase, request_id } = await kraneClient.login();
+
+    this.log(phrase);
 
     let privateKeys = [];
     const sshDir = path.join(os.homedir(), ".ssh");
@@ -38,8 +41,6 @@ export default class Login extends Command {
     privateKeys = allFiles.filter(
       (f) => !f.endsWith(".pub") && !filterOut.includes(f)
     );
-
-    this.log("pkeys", privateKeys.join(", "));
 
     const keyChoices = privateKeys.map((k) => ({
       name: k,
@@ -58,18 +59,14 @@ export default class Login extends Command {
     const pkPath = path.resolve(path.join(sshDir), selectedPk);
     const pk = await readFile(pkPath);
 
-    this.log("pk", pk);
-
     const signedPhrase = jwt.sign({ phrase: phrase }, pk, {
       algorithm: "RS256",
     });
 
-    this.log("signedPhrase", signedPhrase);
-
-    const { token } = await kraneClient.auth(request_id, signedPhrase);
+    const response = await kraneClient.auth(request_id, signedPhrase);
+    this.log("Token expires at: ", response.expires_at);
 
     // TODO: Store token
-    this.log("token", token);
 
     // const name: string = await cli.prompt("What is your name?");
 
