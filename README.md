@@ -29,7 +29,6 @@ USAGE
 # Commands
 <!-- commands -->
 * [`krane-cli deploy [TAG]`](#krane-cli-deploy-tag)
-* [`krane-cli hello [FILE]`](#krane-cli-hello-file)
 * [`krane-cli help [COMMAND]`](#krane-cli-help-command)
 * [`krane-cli login [FILE]`](#krane-cli-login-file)
 
@@ -46,24 +45,6 @@ ARGUMENTS
 ```
 
 _See code: [src/commands/deploy.ts](https://github.com/biensupernice/krane-cli/blob/v0.0.0/src/commands/deploy.ts)_
-
-## `krane-cli hello [FILE]`
-
-describe the command here
-
-```
-USAGE
-  $ krane-cli hello [FILE]
-
-OPTIONS
-  -f, --force
-  -h, --help       show CLI help
-  -n, --name=name  name to print
-
-EXAMPLE
-  $ krane-cli hello
-  hello world from ./src/hello.ts!
-```
 
 _See code: [src/commands/hello.ts](https://github.com/biensupernice/krane-cli/blob/v0.0.0/src/commands/hello.ts)_
 

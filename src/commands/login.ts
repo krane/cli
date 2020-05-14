@@ -31,8 +31,6 @@ export default class Login extends Command {
 
     const { phrase, request_id } = await kraneClient.login();
 
-    this.log(phrase);
-
     let privateKeys = [];
     const sshDir = path.join(os.homedir(), ".ssh");
     const allFiles = await readDir(sshDir);
@@ -64,7 +62,9 @@ export default class Login extends Command {
     });
 
     const response = await kraneClient.auth(request_id, signedPhrase);
+    this.log(`${response}`)
     this.log("Token expires at: ", response.expires_at);
+    this.log(response.token)
 
     // TODO: Store token
 

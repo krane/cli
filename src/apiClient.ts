@@ -25,7 +25,7 @@ export class KraneAPI {
 
   async auth(request_id: string, token: string) {
     return this.client
-      .post<AuthPostResponse>("/login", { request_id, token })
+      .post<AuthPostResponse>("/auth", { request_id, token })
       .then((res) => res.data)
       .then((res) => res.data);
   }
@@ -45,6 +45,7 @@ interface AuthPostResponse {
   data: {
     token: string;
     expires_at: string;
+    valid: boolean;
   }
   success: boolean;
 }
