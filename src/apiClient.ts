@@ -43,11 +43,17 @@ interface LoginGetResponse {
 interface AuthPostResponse {
   code: number;
   data: {
-    token: string;
-    expires_at: string;
-    valid: boolean;
+    error: string;
+    session: Session;
   }
   success: boolean;
+}
+
+
+interface Session  {
+  token: string;
+  expires_at: string;
+  id: string;
 }
 
 interface ProjectSpecConfig {

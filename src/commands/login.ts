@@ -61,10 +61,14 @@ export default class Login extends Command {
       algorithm: "RS256",
     });
 
-    const response = await kraneClient.auth(request_id, signedPhrase);
-    this.log(`${response}`)
-    this.log("Token expires at: ", response.expires_at);
-    this.log(response.token)
+    try {
+      const response = await kraneClient.auth(request_id, signedPhrase);
+      this.log("Token ", response.session?.token);
+      this.log("Token expires at: ", response.session?.expires_at);
+      this.log("Token ID: ", response.session?.id);
+    } catch (e) {
+      this.log("Unable to authenticate");
+    }
 
     // TODO: Store token
 
