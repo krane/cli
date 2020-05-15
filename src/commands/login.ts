@@ -51,15 +51,24 @@ export default class Login extends Command {
         type: "list",
         choices: keyChoices,
       },
+      {
+        name: "passphrase",
+        message: "Key passphrase (Leave empty if not set)",
+        type: "password",
+      },
     ]);
 
-    const selectedPk = responses.key;
+    const { key: selectedPk, passphrase } = responses;
     const pkPath = path.resolve(path.join(sshDir), selectedPk);
     const pk = await readFile(pkPath);
 
-    const signedPhrase = jwt.sign({ phrase: phrase }, pk, {
-      algorithm: "RS256",
-    });
+    const signedPhrase = jwt.sign(
+      { phrase: phrase },
+      { key: pk, passphrase },
+      {
+        algorithm: "RS256",
+      }
+    );
 
     try {
       const response = await kraneClient.auth(request_id, signedPhrase);
