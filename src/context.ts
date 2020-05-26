@@ -113,7 +113,7 @@ class KraneStore extends FileStore<KraneState> {
   }
 
   async serialize(data: KraneState): Promise<string> {
-    return JSON.stringify(data);
+    return JSON.stringify(data, null, 2);
   }
 }
 
