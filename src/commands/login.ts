@@ -9,26 +9,36 @@ const readDir = promisify(fs.readdir);
 const readFile = promisify(fs.readFile);
 import * as jwt from "jsonwebtoken";
 import * as inquirer from "inquirer";
+import { createAppContext } from "../context";
 
 export default class Login extends Command {
-  static description = "describe the command here";
+  ctx = createAppContext();
 
-  static flags = {
-    help: flags.help({ char: "h" }),
-    // flag with a value (-n, --name=VALUE)
-    name: flags.string({ char: "n", description: "name to print" }),
-    // flag with no value (-f, --force)
-    force: flags.boolean({ char: "f" }),
-  };
+  static description = "Login to a krane server";
 
-  static args = [{ name: "file" }];
+  static args = [{ name: "endpoint" }];
 
   async run() {
+    await this.ctx.init();
     const { args, flags } = this.parse(Login);
 
-    const endpoint = "http://localhost:8080";
-    const kraneClient = createClient(endpoint);
+    let endpoint = args.endpoint;
+    if (!endpoint) {
+      endpoint = await cli.prompt(
+        "Please specify the url or IP of your krane server",
+        {
+          required: true,
+        }
+      );
+    }
 
+    this.ctx.setEndpoint(endpoint);
+    await this.ctx.save();
+
+    console.log("ctx.serverEndpoint", this.ctx.serverEnpoint);
+    console.log("ctx.authState.tokenInfo", this.ctx.authState.getTokenInfo());
+
+    const kraneClient = createClient(this.ctx.serverEnpoint);
     const { phrase, request_id } = await kraneClient.login();
 
     let privateKeys = [];
@@ -72,19 +82,23 @@ export default class Login extends Command {
 
     try {
       const response = await kraneClient.auth(request_id, signedPhrase);
-      this.log("Token ", response.session?.token);
-      this.log("Token expires at: ", response.session?.expires_at);
-      this.log("Token ID: ", response.session?.id);
+      const token = response.session.token;
+      const tokenExpiration = new Date(Date.parse(response.session.expires_at));
+
+      this.ctx.authState.setTokenInfo(token, tokenExpiration);
+      await this.ctx.save();
     } catch (e) {
+      if (e.response) {
+        this.log(e.response.data);
+        this.error(e);
+      }
       this.log("Unable to authenticate");
+      this.log(e);
     }
 
-    // TODO: Store token
+    await this.ctx.save();
 
-    // const name: string = await cli.prompt("What is your name?");
-
-    // if (args.file && flags.force) {
-    //   this.log(`you input --force and --file: ${args.file}`);
-    // }
+    this.log("token", this.ctx.authState.getTokenInfo().token);
+    this.log("tokenExpiry", this.ctx.authState.getTokenInfo().tokenExpiry);
   }
 }

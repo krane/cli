@@ -10,9 +10,11 @@
     "@oclif/command": "^1.6.0",
     "@oclif/config": "^1.15.1",
     "@oclif/plugin-help": "^2.2.3",
+    "@types/lodash": "^4.14.152",
     "axios": "^0.19.2",
     "inquirer": "^7.1.0",
     "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.15",
     "tslib": "^1.11.1"
   },
   "devDependencies": {

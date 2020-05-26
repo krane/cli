@@ -1,19 +1,18 @@
 import axios, { AxiosInstance } from "axios";
 
-export function createClient(endpoint: string): KraneAPI {
-  return new KraneAPI(endpoint);
+export function createClient(endpoint: string, token?: string): KraneAPI {
+  return new KraneAPI(endpoint, token);
 }
 
 export class KraneAPI {
   client: AxiosInstance;
-  constructor(endpoint: string) {
+  constructor(endpoint: string, token?: string) {
     this.client = axios.create({
       baseURL: endpoint,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     });
-  }
-
-  async deploy(config: KraneProjectSpec) {
-    return this.client.post("/deploy", config).then((res) => res.data);
   }
 
   async login() {
@@ -27,6 +26,18 @@ export class KraneAPI {
     return this.client
       .post<AuthPostResponse>("/auth", { request_id, token })
       .then((res) => res.data)
+      .then((res) => res.data);
+  }
+
+  async createDeployment(config: KraneProjectSpec) {
+    return this.client
+      .post<CreateDeploymentReponse>("/deployments", config)
+      .then((res) => res.data);
+  }
+
+  async runDeployment(deploymentName: string, tag: string = "latest") {
+    return this.client
+      .post(`/deployments/${deploymentName}/run?tag=${tag}`)
       .then((res) => res.data);
   }
 }
@@ -45,24 +56,30 @@ interface AuthPostResponse {
   data: {
     error: string;
     session: Session;
-  }
+  };
   success: boolean;
 }
 
+interface CreateDeploymentReponse {
+  code: number;
+  data: KraneProjectSpec;
+  success: boolean;
+}
 
-interface Session  {
+interface Session {
   token: string;
   expires_at: string;
   id: string;
 }
 
 interface ProjectSpecConfig {
-  repo: string;
+  registry?: string;
+  container_port?: string;
+  host_post?: string;
   image: string;
-  tag?: string;
 }
 
 export interface KraneProjectSpec {
-  app: string;
+  name: string;
   config: ProjectSpecConfig;
 }
