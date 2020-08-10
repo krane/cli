@@ -1,48 +1,56 @@
-import { Command } from "@oclif/command";
+import { Command, flags } from "@oclif/command";
+import cli from "cli-ux";
 import * as fs from "fs";
 import * as path from "path";
 import * as util from "util";
-import { createClient, KraneProjectSpec } from "../apiClient";
-import { createAppContext } from "../context";
+import { KraneProjectSpec, KraneApiClient } from "../KraneApiClient";
+import { createAppContext } from "../Context";
 const readFile = util.promisify(fs.readFile);
 
 export default class Deploy extends Command {
   ctx = createAppContext();
 
-  static description = "Deploy this app";
+  static description = "Deploy a spec";
 
-  static args = [
-    { name: "tag", description: "image tag to deploy", default: "latest" },
-  ];
+  static flags = {
+    tag: flags.string(),
+    file: flags.string(),
+  };
 
   async run() {
     await this.ctx.init();
+    const { flags } = this.parse(Deploy);
 
     const endpoint = this.ctx.serverEnpoint;
     const { token } = this.ctx.authState.getTokenInfo();
 
-    const kraneClient = createClient(endpoint, token);
+    const kraneClient = new KraneApiClient(endpoint, token);
 
-    const { args } = this.parse(Deploy);
-
-    const appPath = path.resolve(".");
-    const configFilePath = path.resolve(appPath, "krane.json");
-
-    const contents = await (await readFile(configFilePath)).toString();
-
-    const projectConfig: KraneProjectSpec = JSON.parse(contents);
-
-    const deployment = await kraneClient.createDeployment(projectConfig);
-
-    this.log("Created Deployment", deployment.data.name);
-    this.log("With Image", deployment.data.config.image);
+    const projectSpec = await this.loadKraneSpec(flags.file);
 
     try {
-      await kraneClient.runDeployment(deployment.data.name);
-      this.log("Running app...");
-    } catch (err) {
-      console.error(err);
-      this.error(err.message);
+      if (flags.tag) {
+        projectSpec.config.tag = flags.tag;
+      }
+
+      cli.action.start("Applying Spec");
+      const deployment = await kraneClient.createSpec(projectSpec);
+      cli.action.stop();
+
+      cli.action.start("Queuing deployment");
+      await kraneClient.runDeployment(deployment.name);
+      cli.action.stop();
+    } catch (e) {
+      this.error(e);
     }
+  }
+
+  private async loadKraneSpec(pathToSpec?: string): Promise<KraneProjectSpec> {
+    if (!pathToSpec) {
+      const appPath = path.resolve(".");
+      pathToSpec = path.resolve(appPath, "krane.json");
+    }
+    const contents = await (await readFile(pathToSpec)).toString();
+    return JSON.parse(contents);
   }
 }
