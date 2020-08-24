@@ -1,5 +1,7 @@
 import axios, { AxiosInstance, AxiosError } from "axios";
 import { ApiClient, Session } from "./ApiClient";
+import { Spec } from "./types/Spec";
+import { Deployment } from "./types/Deployment";
 
 export class KraneApiClient extends ApiClient {
   client: AxiosInstance;
@@ -34,7 +36,7 @@ export class KraneApiClient extends ApiClient {
       });
   }
 
-  async createSpec(spec: KraneProjectSpec) {
+  async createSpec(spec: Spec) {
     return this.client
       .post<CreateDeploymentReponse>(`/spec`, spec)
       .then((res) => res.data)
@@ -50,6 +52,37 @@ export class KraneApiClient extends ApiClient {
       .then((res) =>
         res.status != 201 ? new Error("Unable to run deployment") : null
       );
+  }
+
+  async getDeployments() {
+    return this.client
+      .get<GetDeploymentsResponse>("/deployments")
+      .then((res) => res.data)
+      .then((res) => res.data)
+      .catch((e: AxiosError) => {
+        throw new Error(e.response?.data?.data);
+      });
+  }
+
+  async getDeployment(deploymentName: string) {
+    return this.client
+      .get<GetDeploymentResponse>(`/deployments/${deploymentName}`)
+      .then((res) => res.data)
+      .then((res) => res.data)
+      .catch((e: AxiosError) => {
+        throw new Error(e.response?.data?.data);
+      });
+  }
+
+  async deleteDeployment(deploymentName: string) {
+    return this.client
+      .delete(`/deployments/${deploymentName}`)
+      .then((res) =>
+        res.status != 201 ? new Error("Unable to delete deployment") : null
+      )
+      .catch((e: AxiosError) => {
+        throw new Error(e.response?.data?.data);
+      });
   }
 }
 
@@ -70,23 +103,18 @@ interface AuthPostResponse {
 
 interface CreateDeploymentReponse {
   code: number;
-  data: KraneProjectSpec;
+  data: Spec;
   success: boolean;
 }
 
-interface ProjectSpecConfig {
-  registry?: string;
-  container_port?: string;
-  host_post?: string;
-  image: string;
-  tag: string;
-  env: { [key: string]: string };
-  volumes: { [key: string]: string };
+interface GetDeploymentResponse {
+  code: number;
+  data: Deployment;
+  success: boolean;
 }
 
-export interface KraneProjectSpec {
-  name: string;
-  config: ProjectSpecConfig;
-  updated_at: string;
-  created_at: string;
+interface GetDeploymentsResponse {
+  code: number;
+  data: Deployment[];
+  success: boolean;
 }

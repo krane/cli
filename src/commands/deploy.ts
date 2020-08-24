@@ -3,8 +3,10 @@ import cli from "cli-ux";
 import * as fs from "fs";
 import * as path from "path";
 import * as util from "util";
-import { KraneProjectSpec, KraneApiClient } from "../KraneApiClient";
+import { KraneApiClient } from "../KraneApiClient";
 import { createAppContext } from "../Context";
+import { Spec } from "../types/Spec";
+import { ApiClient } from "../ApiClient";
 const readFile = util.promisify(fs.readFile);
 
 export default class Deploy extends Command {
@@ -13,8 +15,8 @@ export default class Deploy extends Command {
   static description = "Deploy a spec";
 
   static flags = {
-    tag: flags.string(),
-    file: flags.string(),
+    tag: flags.string({ char: "t" }), // --tag or -t
+    file: flags.string({ char: "f" }), // --file or -f
   };
 
   async run() {
@@ -24,7 +26,7 @@ export default class Deploy extends Command {
     const endpoint = this.ctx.serverEnpoint;
     const { token } = this.ctx.authState.getTokenInfo();
 
-    const kraneClient = new KraneApiClient(endpoint, token);
+    const kraneClient: ApiClient = new KraneApiClient(endpoint, token);
 
     const projectSpec = await this.loadKraneSpec(flags.file);
 
@@ -33,19 +35,15 @@ export default class Deploy extends Command {
         projectSpec.config.tag = flags.tag;
       }
 
-      cli.action.start("Applying Spec");
       const deployment = await kraneClient.createSpec(projectSpec);
-      cli.action.stop();
 
-      cli.action.start("Queuing deployment");
-      await kraneClient.runDeployment(deployment.name);
-      cli.action.stop();
+      await kraneClient.runDeployment(deployment.name, deployment.config.tag);
     } catch (e) {
       this.error(e);
     }
   }
 
-  private async loadKraneSpec(pathToSpec?: string): Promise<KraneProjectSpec> {
+  private async loadKraneSpec(pathToSpec?: string): Promise<Spec> {
     if (!pathToSpec) {
       const appPath = path.resolve(".");
       pathToSpec = path.resolve(appPath, "krane.json");

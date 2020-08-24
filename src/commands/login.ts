@@ -11,7 +11,6 @@ import * as inquirer from "inquirer";
 import { createAppContext } from "../Context";
 import { KraneApiClient } from "../KraneApiClient";
 import { KraneStore } from "../KraneStore";
-import { ApiClient } from "../ApiClient";
 
 export default class Login extends Command {
   ctx = createAppContext();
@@ -51,7 +50,7 @@ export default class Login extends Command {
     this.ctx.authState.setTokenInfo(response.token, tokenExpiration);
     this.ctx.save();
 
-    this.log(`✅ Succesfully authenticated with ${this.ctx.serverEnpoint}`);
+    this.log(`Succesfully authenticated with ${this.ctx.serverEnpoint}`);
   }
 
   private async getPrivateKeyAndPhrase() {

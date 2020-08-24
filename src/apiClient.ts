@@ -1,4 +1,5 @@
-import { KraneProjectSpec } from "./KraneApiClient";
+import { Deployment } from "./types/Deployment";
+import { Spec } from "./types/Spec";
 
 export abstract class ApiClient {
   abstract async login(): Promise<LoginResponse>;
@@ -7,7 +8,10 @@ export abstract class ApiClient {
     name: string,
     tag: string
   ): Promise<Error | null>;
-  abstract async createSpec(spec: KraneProjectSpec): Promise<KraneProjectSpec>;
+  abstract async createSpec(spec: Spec): Promise<Spec>;
+  abstract async getDeployments(): Promise<Deployment[]>;
+  abstract async getDeployment(name: string): Promise<Deployment>;
+  abstract async deleteDeployment(name: string): Promise<Error | null>;
 }
 
 export interface LoginResponse {

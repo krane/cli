@@ -1,9 +1,9 @@
 {
-  "name": "krane-cli",
-  "description": "CLI for krane-server",
-  "version": "0.0.0",
+  "name": "krane",
+  "description": "The CLI for krane",
+  "version": "0.0.1",
   "bin": {
-    "krane-cli": "./bin/run"
+    "krane": "./bin/run"
   },
   "bugs": "https://github.com/biensupernice/krane-cli/issues",
   "dependencies": {
@@ -46,7 +46,7 @@
   "main": "lib/index.js",
   "oclif": {
     "commands": "./lib/commands",
-    "bin": "krane-cli",
+    "bin": "krane",
     "plugins": [
       "@oclif/plugin-help"
     ]

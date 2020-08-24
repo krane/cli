@@ -15,46 +15,63 @@ CLI for krane-server
 # Usage
 <!-- usage -->
 ```sh-session
-$ npm install -g krane-cli
-$ krane-cli COMMAND
+$ npm install -g krane
+$ krane COMMAND
 running command...
-$ krane-cli (-v|--version|version)
-krane-cli/0.0.0 darwin-x64 node-v13.3.0
-$ krane-cli --help [COMMAND]
+$ krane (-v|--version|version)
+krane/0.0.1 darwin-x64 node-v14.5.0
+$ krane --help [COMMAND]
 USAGE
-  $ krane-cli COMMAND
+  $ krane COMMAND
 ...
 ```
 <!-- usagestop -->
 # Commands
 <!-- commands -->
-* [`krane-cli deploy [TAG]`](#krane-cli-deploy-tag)
-* [`krane-cli help [COMMAND]`](#krane-cli-help-command)
-* [`krane-cli login [FILE]`](#krane-cli-login-file)
+* [`krane delete [FILE]`](#krane-delete-file)
+* [`krane deploy`](#krane-deploy)
+* [`krane help [COMMAND]`](#krane-help-command)
+* [`krane login [ENDPOINT]`](#krane-login-endpoint)
+* [`krane status [DEPLOYMENT]`](#krane-status-deployment)
 
-## `krane-cli deploy [TAG]`
+## `krane delete [FILE]`
 
-Deploy this app
-
-```
-USAGE
-  $ krane-cli deploy [TAG]
-
-ARGUMENTS
-  TAG  [default: latest] image tag to deploy
-```
-
-_See code: [src/commands/deploy.ts](https://github.com/biensupernice/krane-cli/blob/v0.0.0/src/commands/deploy.ts)_
-
-_See code: [src/commands/hello.ts](https://github.com/biensupernice/krane-cli/blob/v0.0.0/src/commands/hello.ts)_
-
-## `krane-cli help [COMMAND]`
-
-display help for krane-cli
+describe the command here
 
 ```
 USAGE
-  $ krane-cli help [COMMAND]
+  $ krane delete [FILE]
+
+OPTIONS
+  -f, --force
+  -h, --help       show CLI help
+  -n, --name=name  name to print
+```
+
+_See code: [src/commands/delete.ts](https://github.com/biensupernice/krane-cli/blob/v0.0.1/src/commands/delete.ts)_
+
+## `krane deploy`
+
+Deploy a spec
+
+```
+USAGE
+  $ krane deploy
+
+OPTIONS
+  -f, --file=file
+  -t, --tag=tag
+```
+
+_See code: [src/commands/deploy.ts](https://github.com/biensupernice/krane-cli/blob/v0.0.1/src/commands/deploy.ts)_
+
+## `krane help [COMMAND]`
+
+display help for krane
+
+```
+USAGE
+  $ krane help [COMMAND]
 
 ARGUMENTS
   COMMAND  command to show help for
@@ -65,19 +82,36 @@ OPTIONS
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v2.2.3/src/commands/help.ts)_
 
-## `krane-cli login [FILE]`
+## `krane login [ENDPOINT]`
 
-describe the command here
+Authenticate to a Krane server
 
 ```
 USAGE
-  $ krane-cli login [FILE]
-
-OPTIONS
-  -f, --force
-  -h, --help       show CLI help
-  -n, --name=name  name to print
+  $ krane login [ENDPOINT]
 ```
 
-_See code: [src/commands/login.ts](https://github.com/biensupernice/krane-cli/blob/v0.0.0/src/commands/login.ts)_
+_See code: [src/commands/login.ts](https://github.com/biensupernice/krane-cli/blob/v0.0.1/src/commands/login.ts)_
+
+## `krane status [DEPLOYMENT]`
+
+Get deployment status
+
+```
+USAGE
+  $ krane status [DEPLOYMENT]
+
+OPTIONS
+  -a, --all
+  -x, --extended          show extra columns
+  --columns=columns       only show provided columns (comma-separated)
+  --csv                   output is csv format [alias: --output=csv]
+  --filter=filter         filter property by partial string matching, ex: name=foo
+  --no-header             hide table header from output
+  --no-truncate           do not truncate output to fit screen
+  --output=csv|json|yaml  output in a more machine friendly format
+  --sort=sort             property to sort by (prepend '-' for descending)
+```
+
+_See code: [src/commands/status.ts](https://github.com/biensupernice/krane-cli/blob/v0.0.1/src/commands/status.ts)_
 <!-- commandsstop -->
