@@ -1,8 +1,5 @@
-<<<<<<< HEAD
 import { Serializer } from "../serializer/Serializer";
 
-=======
->>>>>>> ea99882bca9921a4acc9190ebe4babd81785dc93
 export interface Spec {
   name: string;
   config: SpecConfig;
@@ -10,7 +7,6 @@ export interface Spec {
   created_at: string;
 }
 
-<<<<<<< HEAD
 export class SpecBuilder {
   private name: string = "";
   private config: SpecConfig = new SpecConfigBuilder();
@@ -75,18 +71,11 @@ interface SpecConfig {
   registry?: string;
   container_port?: string;
   host_port?: string;
-=======
-interface SpecConfig {
-  registry?: string;
-  container_port?: string;
-  host_post?: string;
->>>>>>> ea99882bca9921a4acc9190ebe4babd81785dc93
   image: string;
   tag: string;
   env: { [key: string]: string };
   volumes: { [key: string]: string };
 }
-<<<<<<< HEAD
 
 export class SpecConfigBuilder {
   image: string = "";
@@ -97,5 +86,3 @@ export class SpecConfigBuilder {
   env: { [key: string]: string } = {};
   volumes: { [key: string]: string } = {};
 }
-=======
->>>>>>> ea99882bca9921a4acc9190ebe4babd81785dc93

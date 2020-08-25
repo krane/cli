@@ -21,11 +21,7 @@ export default class Status extends Command {
 
     const { token } = this.ctx.authState.getTokenInfo();
     const apiClient: ApiClient = new KraneApiClient(
-<<<<<<< HEAD
       this.ctx.serverEndpoint,
-=======
-      this.ctx.serverEnpoint,
->>>>>>> ea99882bca9921a4acc9190ebe4babd81785dc93
       token
     );
     const deployments = await apiClient.getDeployments();
