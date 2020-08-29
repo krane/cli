@@ -21,7 +21,7 @@ jobs:
             asset_name: krane-cli-windows
           - os: macos-latest
             artifact_name: krane-cli-macos
-            asset_name: krane-cli-mac
+            asset_name: krane-cli-macos
 
     steps:
     - uses: actions/checkout@v2
