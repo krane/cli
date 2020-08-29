@@ -11,14 +11,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-    
     - name: Build
+    - uses: actions/checkout@v2
     - run: npm i -g pkg
     - run: pkg .
       
-    - name: Upload binaries to release
-      uses: svenstaro/upload-release-action@v2
+    - name: Upload Krane CLI binaries to release
+    - uses: svenstaro/upload-release-action@v2
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         file: target/release/krane-linux
