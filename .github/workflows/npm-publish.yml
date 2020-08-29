@@ -11,7 +11,6 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        node-version: [12.x]
         include:  
           - os: ubuntu-latest
             artifact_name: krane-linux
@@ -28,7 +27,7 @@ jobs:
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
       with:
-        node-version: ${{ matrix.node-version }}
+        node-version: 12.13.0
         
     - name: Building ${{ matrix.artifact_name }}
       run: npm i -g pkg && pkg . && ls -la
