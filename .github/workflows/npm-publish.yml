@@ -2,8 +2,8 @@ name: publish-to-npm
 
 on:
   push:
-    branches:
-      - master
+    tags:
+      - '*'
 
 jobs:
   publish:
@@ -11,6 +11,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
+        node-version: [8.x, 10.x, 12.x]
         include:
           - os: ubuntu-latest
             artifact_name: krane-cli
@@ -24,8 +25,13 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Build
-      run: npm i -g pkg && pkg .
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+        
+    - name: Build 
+      run: npx pkg .
     
     - name: Upload Krane CLI binaries to release
       uses: svenstaro/upload-release-action@v2
