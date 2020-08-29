@@ -11,7 +11,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        node-version: [8.x, 10.x, 12.x]
+        node-version: [12.x]
         include:  
           - os: ubuntu-latest
             artifact_name: krane-linux
@@ -30,13 +30,13 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         
-    - name: Build 
+    - name: Building ${{ matrix.artifact_name }}
       run: npm i -g pkg && pkg . && ls -la
     
-    - name: Upload Krane CLI binaries to release
+    - name: Uploading ${{ matrix.artifact_name }}
       uses: svenstaro/upload-release-action@v2
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         file: ./${{ matrix.artifact_name }}
-        asset_name: ${{ matrix.asset_name }}-${{ matrix.node-version }}
+        asset_name: ${{ matrix.asset_name }}
         tag: ${{ github.ref }}
