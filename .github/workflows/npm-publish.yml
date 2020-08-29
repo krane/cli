@@ -17,8 +17,8 @@ jobs:
             artifact_name: krane-cli
             asset_name: krane-cli-linux
           - os: windows-latest
-            artifact_name: krane-cli.exe
-            asset_name: krane-cli-windows
+            artifact_name: krane-cli-win.exe
+            asset_name: krane-cli
           - os: macos-latest
             artifact_name: krane-cli
             asset_name: krane-cli-macos
