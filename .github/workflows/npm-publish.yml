@@ -13,6 +13,9 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Build
+    - run: npm i -g pkg
+    - run: pkg .
+    
     - name: Upload Krane CLI binaries to release
       uses: svenstaro/upload-release-action@v2
       with:
@@ -20,6 +23,3 @@ jobs:
         file: target/release/krane-linux
         asset_name: krane-cli
         tag: ${{ github.ref }}
-    - run: npm i -g pkg
-    - run: pkg .
-      
