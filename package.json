@@ -1,7 +1,7 @@
 {
   "name": "krane",
   "description": "The CLI for krane",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "bin": {
     "krane": "./bin/run"
   },

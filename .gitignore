@@ -6,3 +6,8 @@
 /tmp
 /yarn.lock
 node_modules
+
+# CLI binaries
+krane-linux
+krane-macos
+krane-win.exe
