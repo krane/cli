@@ -30,7 +30,7 @@ jobs:
         node-version: 12.13.0
         
     - name: Building ${{ matrix.artifact_name }}
-      run: npm i && npm run prepack && npm postpack && npx pkg .
+      run: npm i && npm run prepack && npm run postpack && npx pkg .
     
     - name: Uploading ${{ matrix.artifact_name }}
       uses: svenstaro/upload-release-action@v2
