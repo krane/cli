@@ -61,6 +61,6 @@
   },
   "types": "lib/index.d.ts",
   "pkg": {
-      "scripts": "./lib/**/*.js"
+    "scripts": "./lib/**/*.js"
   }
 }
