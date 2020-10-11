@@ -1,7 +1,5 @@
 ![CLI](https://res.cloudinary.com/biensupernice/image/upload/v1602457055/cli_rrxw42.png)
 
----
-
 CLI for managing container resources using [Krane](https://krane.sh)
 
 ![publish-npm](https://github.com/krane/cli/workflows/publish-npm/badge.svg?branch=master&event=push)
