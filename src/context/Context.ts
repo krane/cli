@@ -1,9 +1,10 @@
 import * as os from "os";
 import * as path from "path";
-import { memoize } from "lodash";
-import { KraneStore } from "./KraneStore";
-import { AuthState } from "./AuthClient";
 import * as fs from "fs";
+
+import { memoize } from "lodash";
+import { AuthState } from "./AuthClient";
+import { KraneStore } from "../store/KraneStore";
 
 export const createAppContext = memoize(() => new AppContext());
 

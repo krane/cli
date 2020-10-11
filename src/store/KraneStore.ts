@@ -1,8 +1,9 @@
-import { FileStore } from "./FileStore";
-import { KraneState } from "./Context";
-
 import * as fs from "fs";
 import { promisify } from "util";
+
+import { FileStore } from "./FileStore";
+import { KraneState } from "../Context";
+
 const readDir = promisify(fs.readdir);
 
 export class KraneStore extends FileStore<KraneState> {

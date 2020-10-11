@@ -1,7 +1,7 @@
 import { Command } from "@oclif/command";
-import { createAppContext } from "../Context";
-import { KraneApiClient } from "../KraneApiClient";
-import { ApiClient } from "../ApiClient";
+import { KraneClient } from "@krane/common";
+
+import { createAppContext } from "../context/Context";
 
 export default class Delete extends Command {
   ctx = createAppContext();
@@ -23,20 +23,12 @@ export default class Delete extends Command {
 
     const { token } = this.ctx.authState.getTokenInfo();
 
-    const apiClient: ApiClient = new KraneApiClient(
-      this.ctx.serverEndpoint,
-      token
-    );
+    const apiClient = new KraneClient(this.ctx.serverEndpoint, token);
 
     try {
-      const deployment = await apiClient.getDeployment(args.deployment);
-      if (deployment == null) {
-        this.error("Deployment does not exist");
-      }
+      await apiClient.deleteDeployment(args.name);
     } catch (e) {
-      this.error("Deployment does not exist", e);
+      this.error("Unable to delete deployment");
     }
-
-    await apiClient.deleteDeployment(args.deployment);
   }
 }

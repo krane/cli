@@ -1,17 +1,22 @@
 {
-  "name": "krane",
-  "description": "The CLI for krane",
+  "name": "@krane/cli",
   "version": "0.1.0",
+  "description": "CLI for managing container resources using Krane",
+  "bugs": "https://github.com/krane/cli/issues",
+  "homepage": "https://github.com/krane/cli",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "author": "biensupernice",
+  "license": "unlicense",
   "bin": {
     "krane": "./bin/run"
   },
-  "bugs": "https://github.com/biensupernice/krane-cli/issues",
   "dependencies": {
+    "@krane/common": "^0.1.7",
     "@oclif/command": "^1.6.0",
     "@oclif/config": "^1.15.1",
     "@oclif/plugin-help": "^2.2.3",
     "@types/lodash": "^4.14.152",
-    "axios": "^0.19.2",
     "inquirer": "^7.1.0",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.15",
@@ -38,12 +43,9 @@
     "/npm-shrinkwrap.json",
     "/oclif.manifest.json"
   ],
-  "homepage": "https://github.com/biensupernice/krane-cli",
   "keywords": [
     "oclif"
   ],
-  "license": "MIT",
-  "main": "lib/index.js",
   "oclif": {
     "commands": "./lib/commands",
     "bin": "krane",
@@ -51,7 +53,10 @@
       "@oclif/plugin-help"
     ]
   },
-  "repository": "biensupernice/krane-cli",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/krane/cli"
+  },
   "scripts": {
     "postpack": "rm -f oclif.manifest.json",
     "posttest": "eslint . --ext .ts --config .eslintrc",
@@ -59,7 +64,6 @@
     "test": "echo NO TESTS",
     "version": "oclif-dev readme && git add README.md"
   },
-  "types": "lib/index.d.ts",
   "pkg": {
     "scripts": "./lib/**/*.js"
   }

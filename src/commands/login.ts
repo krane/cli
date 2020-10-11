@@ -5,12 +5,15 @@ import * as path from "path";
 import * as fs from "fs";
 import { promisify } from "util";
 
-const readFile = promisify(fs.readFile);
 import * as jwt from "jsonwebtoken";
 import * as inquirer from "inquirer";
-import { createAppContext } from "../Context";
-import { KraneApiClient } from "../KraneApiClient";
-import { KraneStore } from "../KraneStore";
+
+import { KraneClient } from "@krane/common";
+import { KraneStore } from "../store/KraneStore";
+
+import { createAppContext } from "../context/Context";
+
+const readFile = promisify(fs.readFile);
 
 export default class Login extends Command {
   ctx = createAppContext();
@@ -34,10 +37,12 @@ export default class Login extends Command {
     this.ctx.setEndpoint(endpoint);
     await this.ctx.save();
 
-    const apiClient = new KraneApiClient(this.ctx.serverEndpoint);
+    const apiClient = new KraneClient(this.ctx.serverEndpoint);
 
     try {
-      const { request_id, phrase: serverPhrase } = await apiClient.login();
+      const loginResponse = await apiClient.login();
+      const { request_id, phrase: serverPhrase } = loginResponse.data;
+
       const { key, passphrase } = await this.getPrivateKeyAndPhrase();
       const signedServerPhrase = await this.getSignedPhrase(
         key, // private key
@@ -45,15 +50,16 @@ export default class Login extends Command {
         serverPhrase // The phrase that will be encrypted with the selected private key and passphrase
       );
 
-      const response = await apiClient.auth(request_id, signedServerPhrase);
+      const authResponse = await apiClient.auth(request_id, signedServerPhrase);
+      const { expires_at, token } = authResponse.data;
 
-      const tokenExpiration = new Date(Date.parse(response.expires_at));
-      this.ctx.authState.setTokenInfo(response.token, tokenExpiration);
+      const tokenExpiration = new Date(Date.parse(expires_at));
+      this.ctx.authState.setTokenInfo(token, tokenExpiration);
       this.ctx.save();
 
       this.log(`Succesfully authenticated with ${this.ctx.serverEndpoint}`);
     } catch (e) {
-      this.error(e?.message);
+      this.log(`Unable to authenticate with ${this.ctx.serverEndpoint}`);
     }
   }
 

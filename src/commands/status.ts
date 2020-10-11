@@ -1,7 +1,7 @@
+import { KraneClient } from "@krane/common";
 import { Command, flags } from "@oclif/command";
-import { createAppContext } from "../Context";
-import { KraneApiClient } from "../KraneApiClient";
-import { ApiClient } from "../ApiClient";
+import { createAppContext } from "../context/Context";
+
 import { cli } from "cli-ux";
 
 export default class Status extends Command {
@@ -20,50 +20,50 @@ export default class Status extends Command {
     const { args, flags } = this.parse(Status);
 
     const { token } = this.ctx.authState.getTokenInfo();
-    const apiClient: ApiClient = new KraneApiClient(
-      this.ctx.serverEndpoint,
-      token
-    );
-    const deployments = await apiClient.getDeployments();
-    cli.table(
-      deployments,
-      {
-        name: {
-          get: (deployment) => deployment.spec.name,
-          minWidth: 20,
-        },
 
-        status: {
-          get: (deployment) => deployment.containers[0]?.State ?? "",
-          minWidth: 20,
-        },
-        up: {
-          get: (deployment) => deployment.containers.length,
-          extended: !flags.all,
-          minWidth: 10,
-        },
-        alias: {
-          get: (deployment) => deployment.alias,
-          minWidth: 20,
-          extended: !flags.all,
-        },
-        ports: {
-          get: (deployment) =>
-            deployment.spec.config.host_port +
-            ":" +
-            deployment.spec.config.container_port,
-          minWidth: 20,
-          extended: !flags.all,
-        },
-        image: {
-          get: (deployment) => deployment.spec.config.image,
-          minWidth: 20,
-          extended: !flags.all,
-        },
-      },
-      {
-        filter: args?.deployment && `name=${args.deployment}`,
-      }
-    );
+    const apiClient = new KraneClient(this.ctx.serverEndpoint, token);
+
+    //   const response = await apiClient.getDeployments();
+
+    //   cli.table(
+    //     deployments,
+    //     {
+    //       name: {
+    //         get: (deployment) => deployment.spec.name,
+    //         minWidth: 20,
+    //       },
+
+    //       status: {
+    //         get: (deployment) => deployment.containers[0]?.State ?? "",
+    //         minWidth: 20,
+    //       },
+    //       up: {
+    //         get: (deployment) => deployment.containers.length,
+    //         extended: !flags.all,
+    //         minWidth: 10,
+    //       },
+    //       alias: {
+    //         get: (deployment) => deployment.alias,
+    //         minWidth: 20,
+    //         extended: !flags.all,
+    //       },
+    //       ports: {
+    //         get: (deployment) =>
+    //           deployment.spec.config.host_port +
+    //           ":" +
+    //           deployment.spec.config.container_port,
+    //         minWidth: 20,
+    //         extended: !flags.all,
+    //       },
+    //       image: {
+    //         get: (deployment) => deployment.spec.config.image,
+    //         minWidth: 20,
+    //         extended: !flags.all,
+    //       },
+    //     },
+    //     {
+    //       filter: args?.deployment && `name=${args.deployment}`,
+    //     }
+    //   );
   }
 }
