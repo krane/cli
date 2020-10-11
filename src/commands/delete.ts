@@ -26,7 +26,7 @@ export default class Delete extends Command {
     const apiClient = new KraneClient(this.ctx.serverEndpoint, token);
 
     try {
-      await apiClient.deleteDeployment(args.name);
+      await apiClient.deleteDeployment(args.deployment);
     } catch (e) {
       this.error("Unable to delete deployment");
     }

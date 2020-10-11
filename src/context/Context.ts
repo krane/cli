@@ -25,6 +25,7 @@ export interface KraneState {
   token?: string;
   tokenExpiry?: Date;
   endpoint?: string;
+  principal?: string;
 }
 
 export class AppContext {
@@ -60,11 +61,12 @@ export class AppContext {
   }
 
   async init() {
-    const { endpoint, token, tokenExpiry } = await this.store.get();
+    const { endpoint, token, tokenExpiry, principal } = await this.store.get();
 
     this.endpoint = endpoint;
 
     this.authState.init({
+      principal: principal,
       token: token,
       tokenExpiry: tokenExpiry,
     });
@@ -77,12 +79,14 @@ export class AppContext {
       ctx.endpoint = this.endpoint;
     }
 
-    const { token, tokenExpiry } = this.authState.getTokenInfo();
+    const { token, tokenExpiry, principal } = this.authState.getTokenInfo();
 
-    if (token && tokenExpiry) {
+    if (token && tokenExpiry && principal) {
       ctx.token = token;
       ctx.tokenExpiry = tokenExpiry;
+      ctx.principal = principal;
     }
+
     await this.store.save(ctx);
   }
 }

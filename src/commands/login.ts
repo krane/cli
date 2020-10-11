@@ -51,10 +51,10 @@ export default class Login extends Command {
       );
 
       const authResponse = await apiClient.auth(request_id, signedServerPhrase);
-      const { expires_at, token } = authResponse.data;
+      const { expires_at, token, principal } = authResponse.data;
 
       const tokenExpiration = new Date(Date.parse(expires_at));
-      this.ctx.authState.setTokenInfo(token, tokenExpiration);
+      this.ctx.authState.setTokenInfo(token, tokenExpiration, principal);
       this.ctx.save();
 
       this.log(`Succesfully authenticated with ${this.ctx.serverEndpoint}`);

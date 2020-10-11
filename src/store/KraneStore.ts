@@ -2,7 +2,7 @@ import * as fs from "fs";
 import { promisify } from "util";
 
 import { FileStore } from "./FileStore";
-import { KraneState } from "../Context";
+import { KraneState } from "../context/Context";
 
 const readDir = promisify(fs.readdir);
 
@@ -10,6 +10,7 @@ export class KraneStore extends FileStore<KraneState> {
   async parse(data: string): Promise<KraneState> {
     if (!data) {
       return {
+        principal: undefined,
         endpoint: undefined,
         token: undefined,
         tokenExpiry: undefined,
@@ -19,6 +20,7 @@ export class KraneStore extends FileStore<KraneState> {
     const p = JSON.parse(data) as KraneState;
 
     return {
+      principal: p.principal,
       endpoint: p.endpoint,
       token: p.token,
       tokenExpiry: p.tokenExpiry,

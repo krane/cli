@@ -6,7 +6,6 @@ import { Command, flags } from "@oclif/command";
 import { KraneClient, Config } from "@krane/common";
 
 import { createAppContext } from "../context/Context";
-import { JsonSerializer } from "../serializer/JsonSerializer";
 
 const readFile = util.promisify(fs.readFile);
 
@@ -29,27 +28,28 @@ export default class Deploy extends Command {
 
     const apiClient = new KraneClient(endpoint, token);
 
-    const projectConfig = await this.loadKraneSpec(flags.file);
+    const config = await this.loadKraneSpec(flags.file);
 
     try {
       if (flags.tag) {
-        projectConfig.tag = flags.tag;
+        config.tag = flags.tag;
       }
 
-      await apiClient.saveDeployment(projectConfig);
-      this.log("Succesfully applied deployment configuration");
+      await apiClient.saveDeployment(config);
     } catch (e) {
-      this.error("Unable to apply deployment configuration");
+      this.error(
+        `Unable to apply deployment configuration, ${e?.response.data?.data}`
+      );
     }
   }
 
-  private async loadKraneSpec(pathToSpec?: string): Promise<Config> {
-    if (!pathToSpec) {
+  private async loadKraneSpec(pathToConfig?: string): Promise<Config> {
+    if (!pathToConfig) {
       const appPath = path.resolve(".");
-      pathToSpec = path.resolve(appPath, "krane.json");
+      pathToConfig = path.resolve(appPath, "krane.json");
     }
 
-    const contents = await readFile(pathToSpec);
-    return new JsonSerializer<Config>().serialize(contents);
+    const contents = await readFile(pathToConfig);
+    return JSON.parse(contents.toString()) as Config;
   }
 }
