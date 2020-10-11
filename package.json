@@ -1,6 +1,6 @@
 {
   "name": "@krane/cli",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "CLI for managing container resources using Krane",
   "bugs": "https://github.com/krane/cli/issues",
   "homepage": "https://github.com/krane/cli",
@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@krane/common": "^0.1.8",
-    "@oclif/command": "^1.6.0",
+    "@oclif/command": "^1.8.0",
     "@oclif/config": "^1.15.1",
     "@oclif/plugin-help": "^2.2.3",
     "@types/lodash": "^4.14.152",

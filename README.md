@@ -1,5 +1,7 @@
 CLI for managing container resources using [Krane](https://krane.sh)
 
+![publish-npm](https://github.com/krane/cli/workflows/publish-npm/badge.svg?branch=master&event=push)
+
 ## Install
 
 ```
