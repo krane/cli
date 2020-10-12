@@ -15,7 +15,8 @@ $ krane [COMMAND]
 
 COMMANDS
 
-deploy  Deploy a service
+deploy  Create a deployment
 delete  Delete a deployment
-login   Authenticate to a Krane server
+list    List all deployments
+login   Authenticate with a Krane server
 ```

@@ -18,7 +18,7 @@ const readFile = promisify(fs.readFile);
 export default class Login extends Command {
   ctx = createAppContext();
 
-  static description = "Authenticate to a Krane server";
+  static description = "Authenticate with a Krane server";
 
   static args = [{ name: "endpoint" }];
 

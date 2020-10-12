@@ -12,7 +12,7 @@ const readFile = util.promisify(fs.readFile);
 export default class Deploy extends Command {
   ctx = createAppContext();
 
-  static description = "Deploy a service";
+  static description = "Create a deployment";
 
   static flags = {
     tag: flags.string({ char: "t" }), // --tag or -t
