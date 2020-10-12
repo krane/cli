@@ -15,8 +15,10 @@ $ krane [COMMAND]
 
 COMMANDS
 
-deploy  Create a deployment
-delete  Delete a deployment
-list    List all deployments
-login   Authenticate with a Krane server
+deploy -f krane.json              Create a deployment
+delete <deployment>               Delete a deployment
+list                              List all deployments
+secrets add <deployment> -k -v    Add a secret for a deployment
+secrets list <deployment>         List all secrets for a deployment
+login                             Authenticate with a Krane server
 ```
