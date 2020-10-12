@@ -1,4 +1,4 @@
-![CLI](https://res.cloudinary.com/biensupernice/image/upload/v1602457055/cli_rrxw42.png)
+![CLI](https://res.cloudinary.com/biensupernice/image/upload/v1602471644/Marketing_-_Krane_CLI_zfw8vh.png)
 
 CLI for managing container resources using [Krane](https://krane.sh)
 
