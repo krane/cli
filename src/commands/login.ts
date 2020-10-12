@@ -40,8 +40,7 @@ export default class Login extends Command {
     const apiClient = new KraneClient(this.ctx.serverEndpoint);
 
     try {
-      const loginResponse = await apiClient.login();
-      const { request_id, phrase: serverPhrase } = loginResponse.data;
+      const { request_id, phrase: serverPhrase } = await apiClient.login();
 
       const { key, passphrase } = await this.getPrivateKeyAndPhrase();
       const signedServerPhrase = await this.getSignedPhrase(
@@ -50,8 +49,10 @@ export default class Login extends Command {
         serverPhrase // The phrase that will be encrypted with the selected private key and passphrase
       );
 
-      const authResponse = await apiClient.auth(request_id, signedServerPhrase);
-      const { expires_at, token, principal } = authResponse.data;
+      const { expires_at, token, principal } = await apiClient.auth(
+        request_id,
+        signedServerPhrase
+      );
 
       const tokenExpiration = new Date(Date.parse(expires_at));
       this.ctx.authState.setTokenInfo(token, tokenExpiration, principal);

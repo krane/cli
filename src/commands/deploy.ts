@@ -12,7 +12,7 @@ const readFile = util.promisify(fs.readFile);
 export default class Deploy extends Command {
   ctx = createAppContext();
 
-  static description = "Apply a deployment configuration";
+  static description = "Deploy a service";
 
   static flags = {
     tag: flags.string({ char: "t" }), // --tag or -t
@@ -37,9 +37,7 @@ export default class Deploy extends Command {
 
       await apiClient.saveDeployment(config);
     } catch (e) {
-      this.error(
-        `Unable to apply deployment configuration, ${e?.response.data?.data}`
-      );
+      this.error(`Unable to apply deployment configuration`);
     }
   }
 
