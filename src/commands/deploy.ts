@@ -3,8 +3,8 @@ import * as path from "path";
 import * as util from "util";
 
 import { Command, flags } from "@oclif/command";
-import { KraneClient, Config } from "@krane/common";
 
+import { KraneClient, Config } from "@krane/common";
 import { createAppContext } from "../context/Context";
 
 const readFile = util.promisify(fs.readFile);

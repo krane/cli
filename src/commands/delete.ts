@@ -1,6 +1,6 @@
 import { Command } from "@oclif/command";
-import { KraneClient } from "@krane/common";
 
+import { KraneClient } from "@krane/common";
 import { createAppContext } from "../context/Context";
 
 export default class Delete extends Command {

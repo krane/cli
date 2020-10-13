@@ -1,7 +1,8 @@
-import { cli } from "cli-ux";
-import { createAppContext } from "./../context/Context";
-import { KraneClient } from "@krane/common";
 import { Command, flags } from "@oclif/command";
+import { cli } from "cli-ux";
+
+import { KraneClient } from "@krane/common";
+import { createAppContext } from "./../context/Context";
 
 export default class Secrets extends Command {
   ctx = createAppContext();
@@ -39,10 +40,6 @@ export default class Secrets extends Command {
 
     switch (args.subcommand) {
       case "add":
-        if (flags.key == null || flags.value == null) {
-          this.error("Missing required key or value");
-        }
-
         await this.add(args.deployment, flags.key!!, flags.value!!);
         break;
       case "list":
@@ -56,13 +53,11 @@ export default class Secrets extends Command {
     }
   }
 
-  async must(value: string) {
-    if (value == null || value == "") {
-      throw new Error("Value must not be empty");
-    }
-  }
-
   async add(deploymentName: string, key: string, value: string) {
+    if (key == null || value == null) {
+      this.error("Missing required key or value");
+    }
+
     try {
       const secret = await this.client.addSecret(deploymentName, key, value);
       this.log(
