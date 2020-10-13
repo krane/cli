@@ -1,7 +1,7 @@
 import { Command } from "@oclif/command";
 import { cli } from "cli-ux";
 
-import { KraneClient } from "@krane/common";
+import { KraneClient, Config } from "@krane/common";
 import { createAppContext } from "./../context/Context";
 
 export default class List extends Command {
@@ -18,7 +18,12 @@ export default class List extends Command {
 
     const apiClient = new KraneClient(this.ctx.serverEndpoint, token);
 
-    const deployments = await apiClient.getDeployments();
+    let deployments;
+    try {
+      deployments = await apiClient.getDeployments();
+    } catch (e) {
+      this.error("Unable to get deployments");
+    }
 
     cli.table(deployments, {
       name: {
