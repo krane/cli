@@ -23,7 +23,7 @@ export default class Secrets extends Command {
     {
       name: "subcommand",
       required: true,
-      options: ["add", "list"],
+      options: ["add", "list", "delete"],
     },
     {
       name: "deployment",
@@ -48,6 +48,9 @@ export default class Secrets extends Command {
       case "list":
         await this.list(args.deployment);
         break;
+      case "delete":
+        await this.delete(args.deployment, flags.key!!);
+        break;
       default:
         this.error(`Unknown command ${args.subcommand}`);
     }
@@ -71,17 +74,25 @@ export default class Secrets extends Command {
     }
   }
 
+  async delete(deploymentName: string, key: string) {
+    try {
+      await this.client.deleteSecret(deploymentName, key);
+    } catch (e) {
+      this.error(`Unable to remove secret ${key}`);
+    }
+  }
+
   async list(deploymentName: string) {
     try {
       const secrets = await this.client.getSecrets(deploymentName);
       cli.table(secrets, {
-        alias: {
-          get: (secret) => secret.alias,
-          minWidth: 20,
-        },
         key: {
           get: (secret) => secret.key,
           minWidth: 30,
+        },
+        alias: {
+          get: (secret) => secret.alias,
+          minWidth: 20,
         },
       });
     } catch (e) {
