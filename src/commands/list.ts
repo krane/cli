@@ -22,7 +22,7 @@ export default class List extends Command {
     try {
       deployments = await apiClient.getDeployments();
     } catch (e) {
-      this.error("Unable to get deployments");
+      this.error(`${e}`);
     }
 
     cli.table(deployments, {

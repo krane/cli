@@ -1,12 +1,9 @@
-import { Command, flags } from "@oclif/command";
 import { cli } from "cli-ux";
+import { flags } from "@oclif/command";
 
-import { KraneClient } from "@krane/common";
-import { createAppContext } from "./../context/Context";
+import BaseCommand from "./base";
 
-export default class Secrets extends Command {
-  ctx = createAppContext();
-
+export default class Secrets extends BaseCommand {
   static description = "describe the command here";
 
   static flags = {
@@ -34,8 +31,6 @@ export default class Secrets extends Command {
   ];
 
   async run() {
-    await this.ctx.init();
-
     const { args, flags } = this.parse(Secrets);
 
     switch (args.subcommand) {
@@ -59,7 +54,8 @@ export default class Secrets extends Command {
     }
 
     try {
-      const secret = await this.client.addSecret(deploymentName, key, value);
+      const client = await this.getClient();
+      const secret = await client.addSecret(deploymentName, key, value);
       this.log(
         `\nSecret added ✅ \nYou can refer to this secret in your krane.json with the following alias: \n${secret?.alias} 
         \nFor more details on configuring secrets checkout: \nhttps://www.krane.sh/#/04-configuration?id=secrets`
@@ -71,7 +67,8 @@ export default class Secrets extends Command {
 
   async delete(deploymentName: string, key: string) {
     try {
-      await this.client.deleteSecret(deploymentName, key);
+      const client = await this.getClient();
+      await client.deleteSecret(deploymentName, key);
     } catch (e) {
       this.error(`Unable to remove secret ${key}`);
     }
@@ -79,7 +76,8 @@ export default class Secrets extends Command {
 
   async list(deploymentName: string) {
     try {
-      const secrets = await this.client.getSecrets(deploymentName);
+      const client = await this.getClient();
+      const secrets = await client.getSecrets(deploymentName);
       cli.table(secrets, {
         key: {
           get: (secret) => secret.key,
@@ -93,11 +91,5 @@ export default class Secrets extends Command {
     } catch (e) {
       this.error(`Unable to get secrets for ${deploymentName}`);
     }
-  }
-
-  get client(): KraneClient {
-    // todo: memoize?
-    const { token } = this.ctx.authState.getTokenInfo();
-    return new KraneClient(this.ctx.serverEndpoint, token);
   }
 }

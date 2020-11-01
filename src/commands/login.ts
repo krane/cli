@@ -11,18 +11,16 @@ import * as inquirer from "inquirer";
 import { KraneClient } from "@krane/common";
 import { KraneStore } from "../store/KraneStore";
 import { createAppContext } from "../context/Context";
+import BaseCommand from "./base";
 
 const readFile = promisify(fs.readFile);
 
-export default class Login extends Command {
-  ctx = createAppContext();
-
+export default class Login extends BaseCommand {
   static description = "Authenticate with a Krane server";
 
   static args = [{ name: "endpoint" }];
 
   async run() {
-    await this.ctx.init();
     const { args } = this.parse(Login);
 
     let endpoint = args.endpoint;
@@ -36,10 +34,10 @@ export default class Login extends Command {
     this.ctx.setEndpoint(endpoint);
     await this.ctx.save();
 
-    const apiClient = new KraneClient(this.ctx.serverEndpoint);
-
     try {
-      const { request_id, phrase: serverPhrase } = await apiClient.login();
+      const client = await this.getClient();
+
+      const { request_id, phrase: serverPhrase } = await client.login();
 
       const { key, passphrase } = await this.getPrivateKeyAndPhrase();
       const signedServerPhrase = await this.getSignedPhrase(
@@ -48,7 +46,7 @@ export default class Login extends Command {
         serverPhrase // The phrase that will be encrypted with the selected private key and passphrase
       );
 
-      const { expires_at, token, principal } = await apiClient.auth(
+      const { expires_at, token, principal } = await client.auth(
         request_id,
         signedServerPhrase
       );
@@ -59,7 +57,7 @@ export default class Login extends Command {
 
       this.log(`Succesfully authenticated with ${this.ctx.serverEndpoint}`);
     } catch (e) {
-      this.log(`Unable to authenticate with ${this.ctx.serverEndpoint}`);
+      this.error(`Unable to authenticate with ${this.ctx.serverEndpoint}`);
     }
   }
 

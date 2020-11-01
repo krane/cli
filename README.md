@@ -15,12 +15,12 @@ $ krane [COMMAND]
 
 COMMANDS
 
-deploy -f myapp.json                Deploy myapp
-delete myapp                        Delete myapp
+deploy -f myapp.json                Deploy
+delete myapp                        Delete a deployment
 list                                List all deployments
-config myapp                        Get deployment config for myapp
-secrets list myapp                  List all secrets for myapp
-secrets add myapp -k token -v xxx   Add a secret to myapp
-secrets delete myapp -k token       Delete a secret from myapp
+config myapp                        Get the deployment configuration
+secrets list myapp                  List all secrets for a deployment
+secrets add myapp -k token -v xxx   Add a secret to a deployment
+secrets delete myapp -k token       Delete a secret from a deployment
 login                               Authenticate with a Krane server
 ```

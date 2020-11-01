@@ -2,31 +2,23 @@ import * as fs from "fs";
 import * as path from "path";
 import * as util from "util";
 
-import { Command, flags } from "@oclif/command";
+import { flags } from "@oclif/command";
+import { Config } from "@krane/common";
 
-import { KraneClient, Config } from "@krane/common";
-import { createAppContext } from "../context/Context";
+import BaseCommand from "./base";
 
 const readFile = util.promisify(fs.readFile);
 
-export default class Deploy extends Command {
-  ctx = createAppContext();
-
+export default class Deploy extends BaseCommand {
   static description = "Create a deployment";
 
   static flags = {
-    tag: flags.string({ char: "t" }), // --tag or -t
     file: flags.string({ char: "f" }), // --file or -f
+    tag: flags.string({ char: "t" }), // --tag or -t
   };
 
   async run() {
-    await this.ctx.init();
     const { flags } = this.parse(Deploy);
-
-    const endpoint = this.ctx.serverEndpoint;
-    const { token } = this.ctx.authState.getTokenInfo();
-
-    const apiClient = new KraneClient(endpoint, token);
 
     const config = await this.loadKraneSpec(flags.file);
 
@@ -35,7 +27,8 @@ export default class Deploy extends Command {
         config.tag = flags.tag;
       }
 
-      await apiClient.saveDeployment(config);
+      const client = await this.getClient();
+      await client.saveDeployment(config);
     } catch (e) {
       this.error(`Unable to apply deployment configuration`);
     }
