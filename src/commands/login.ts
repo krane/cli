@@ -11,7 +11,7 @@ import * as inquirer from "inquirer";
 import { KraneClient } from "@krane/common";
 import { KraneStore } from "../store/KraneStore";
 import { createAppContext } from "../context/Context";
-import BaseCommand from "./base";
+import BaseCommand from "../base";
 
 const readFile = promisify(fs.readFile);
 

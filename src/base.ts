@@ -2,7 +2,7 @@ import { Command } from "@oclif/command";
 import { IConfig } from "@oclif/config";
 
 import { KraneClient } from "@krane/common";
-import { AppContext, createAppContext } from "../context/Context";
+import { AppContext, createAppContext } from "./context/Context";
 
 // Base OCLIF command for interacting with Krane
 export default abstract class BaseCommand extends Command {

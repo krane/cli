@@ -1,4 +1,4 @@
-import BaseCommand from "./base";
+import BaseCommand from "../base";
 
 export default class Config extends BaseCommand {
   static description = "Get the deployment configiguration";

@@ -5,7 +5,7 @@ import * as util from "util";
 import { flags } from "@oclif/command";
 import { Config } from "@krane/common";
 
-import BaseCommand from "./base";
+import BaseCommand from "../base";
 
 const readFile = util.promisify(fs.readFile);
 

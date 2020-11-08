@@ -1,10 +1,10 @@
 import { cli } from "cli-ux";
 import { flags } from "@oclif/command";
 
-import BaseCommand from "./base";
+import BaseCommand from "../base";
 
 export default class Secrets extends BaseCommand {
-  static description = "describe the command here";
+  static description = "List, add or delete deployment secrets.";
 
   static flags = {
     key: flags.string({

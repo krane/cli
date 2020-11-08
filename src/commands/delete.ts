@@ -1,4 +1,4 @@
-import BaseCommand from "./base";
+import BaseCommand from "../base";
 
 export default class Delete extends BaseCommand {
   static description = "Delete a deployment";

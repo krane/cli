@@ -1,26 +1,16 @@
-import { Command } from "@oclif/command";
 import { cli } from "cli-ux";
+import BaseCommand from "../base";
 
-import { KraneClient, Config } from "@krane/common";
-import { createAppContext } from "./../context/Context";
-
-export default class List extends Command {
-  ctx = createAppContext();
-
+export default class List extends BaseCommand {
   static description = "List deployments";
 
   static aliases = ["ls"];
 
   async run() {
-    await this.ctx.init();
-
-    const { token } = this.ctx.authState.getTokenInfo();
-
-    const apiClient = new KraneClient(this.ctx.serverEndpoint, token);
-
     let deployments;
     try {
-      deployments = await apiClient.getDeployments();
+      const client = await this.getClient();
+      deployments = await client.getDeployments();
     } catch (e) {
       this.error(`${e}`);
     }
