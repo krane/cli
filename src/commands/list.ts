@@ -28,6 +28,10 @@ export default class List extends BaseCommand {
         get: (deployment) => deployment.tag,
         minWidth: 20,
       },
+      scale: {
+        get: (deployment) => deployment.scale,
+        minWidth: 10,
+      },
     });
   }
 }

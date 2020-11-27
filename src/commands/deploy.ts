@@ -10,7 +10,7 @@ import BaseCommand from "../base";
 const readFile = util.promisify(fs.readFile);
 
 export default class Deploy extends BaseCommand {
-  static description = "Create a deployment";
+  static description = "Create or update a deployment";
 
   static flags = {
     file: flags.string({ char: "f" }), // --file or -f
@@ -27,8 +27,12 @@ export default class Deploy extends BaseCommand {
         config.tag = flags.tag;
       }
 
+      if (config.scale == null) {
+        config.scale = 1;
+      }
+
       const client = await this.getClient();
-      await client.saveDeployment(config);
+      await client.applyDeployment(config);
     } catch (e) {
       this.error(`Unable to apply deployment configuration`);
     }

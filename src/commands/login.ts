@@ -1,4 +1,3 @@
-import { Command } from "@oclif/command";
 import cli from "cli-ux";
 
 import * as path from "path";
@@ -8,9 +7,7 @@ import { promisify } from "util";
 import * as jwt from "jsonwebtoken";
 import * as inquirer from "inquirer";
 
-import { KraneClient } from "@krane/common";
 import { KraneStore } from "../store/KraneStore";
-import { createAppContext } from "../context/Context";
 import BaseCommand from "../base";
 
 const readFile = promisify(fs.readFile);
