@@ -15,16 +15,21 @@ export default class Deploy extends BaseCommand {
   static flags = {
     file: flags.string({ char: "f" }), // --file or -f
     tag: flags.string({ char: "t" }), // --tag or -t
+    scale: flags.string({ char: "s" }), // --scale or -s
   };
 
   async run() {
     const { flags } = this.parse(Deploy);
 
-    const config = await this.loadKraneSpec(flags.file);
+    const config = await this.loadDeploymentConfig(flags.file);
 
     try {
       if (flags.tag) {
         config.tag = flags.tag;
+      }
+
+      if (flags.scale) {
+        config.scale = parseInt(flags.scale);
       }
 
       if (config.scale == null) {
@@ -38,10 +43,10 @@ export default class Deploy extends BaseCommand {
     }
   }
 
-  private async loadKraneSpec(pathToConfig?: string): Promise<Config> {
+  private async loadDeploymentConfig(pathToConfig?: string): Promise<Config> {
     if (!pathToConfig) {
       const appPath = path.resolve(".");
-      pathToConfig = path.resolve(appPath, "krane.json");
+      pathToConfig = path.resolve(appPath, "deployment.json");
     }
 
     const contents = await readFile(pathToConfig);

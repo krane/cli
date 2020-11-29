@@ -4,7 +4,7 @@ import { flags } from "@oclif/command";
 import BaseCommand from "../base";
 
 export default class Secrets extends BaseCommand {
-  static description = "List, add or delete deployment secrets.";
+  static description = "Add, delete, or list deployment secrets.";
 
   static flags = {
     key: flags.string({
@@ -37,11 +37,11 @@ export default class Secrets extends BaseCommand {
       case "add":
         await this.add(args.deployment, flags.key!!, flags.value!!);
         break;
-      case "list":
-        await this.list(args.deployment);
-        break;
       case "delete":
         await this.delete(args.deployment, flags.key!!);
+        break;
+      case "list":
+        await this.list(args.deployment);
         break;
       default:
         this.error(`Unknown command ${args.subcommand}`);
