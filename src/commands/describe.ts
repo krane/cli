@@ -1,5 +1,6 @@
 import { Container } from "@krane/common";
 import { cli } from "cli-ux";
+
 import BaseCommand from "../base";
 
 export default class Describe extends BaseCommand {
@@ -68,6 +69,8 @@ export default class Describe extends BaseCommand {
     this.log(`Status: ${container.state.status.toUpperCase()}`);
     this.log(`Image: ${container.image}`);
     this.log(`ImageId: ${container.image_id}`);
+    this.log(`Command: ${container.command}`);
+    this.log(`Entrypoint: ${container.entrypoint}`);
 
     // ports
     const portCount = container.ports.length;
