@@ -10,7 +10,7 @@ export class KraneStore extends FileStore<KraneState> {
   async parse(data: string): Promise<KraneState> {
     if (!data) {
       return {
-        principal: undefined,
+        user: undefined,
         endpoint: undefined,
         token: undefined,
         tokenExpiry: undefined,
@@ -20,7 +20,7 @@ export class KraneStore extends FileStore<KraneState> {
     const p = JSON.parse(data) as KraneState;
 
     return {
-      principal: p.principal,
+      user: p.user,
       endpoint: p.endpoint,
       token: p.token,
       tokenExpiry: p.tokenExpiry,

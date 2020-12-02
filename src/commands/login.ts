@@ -43,13 +43,13 @@ export default class Login extends BaseCommand {
         serverPhrase // The phrase that will be encrypted with the selected private key and passphrase
       );
 
-      const { expires_at, token, principal } = await client.auth(
+      const { expires_at, token, user } = await client.auth(
         request_id,
         signedServerPhrase
       );
 
       const tokenExpiration = new Date(Date.parse(expires_at));
-      this.ctx.authState.setTokenInfo(token, tokenExpiration, principal);
+      this.ctx.authState.setTokenInfo(token, tokenExpiration, user);
       this.ctx.save();
 
       this.log(`Succesfully authenticated with ${this.ctx.serverEndpoint}`);

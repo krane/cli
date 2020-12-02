@@ -1,38 +1,38 @@
 type AuthStateParams = {
   token?: string;
   tokenExpiry?: Date;
-  principal?: string;
+  user?: string;
 };
 
 export class AuthState {
   constructor(
     private token?: string,
     private tokenExpiry?: Date,
-    private principal?: string
+    private user?: string
   ) {}
 
-  init({ token, tokenExpiry, principal }: AuthStateParams) {
+  init({ token, tokenExpiry, user }: AuthStateParams) {
     this.token = token;
-    this.principal = principal;
+    this.user = user;
     this.tokenExpiry = tokenExpiry;
   }
 
   getTokenInfo() {
     return {
       token: this.token,
-      principal: this.principal,
+      user: this.user,
       tokenExpiry: this.tokenExpiry,
     };
   }
 
-  setTokenInfo(token: string, tokenExpiry: Date, principal: string) {
+  setTokenInfo(token: string, tokenExpiry: Date, user: string) {
     this.token = token;
     this.tokenExpiry = tokenExpiry;
-    this.principal = principal;
+    this.user = user;
   }
 
   hasValidToken() {
-    if (!this.token || !this.tokenExpiry || !this.principal) {
+    if (!this.token || !this.tokenExpiry || !this.user) {
       return false;
     }
 
