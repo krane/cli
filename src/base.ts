@@ -4,7 +4,6 @@ import { IConfig } from "@oclif/config";
 import { KraneClient } from "@krane/common";
 import { AppContext, createAppContext } from "./context/Context";
 
-// Base OCLIF command for interacting with Krane
 export default abstract class BaseCommand extends Command {
   protected ctx: AppContext;
 
@@ -13,7 +12,7 @@ export default abstract class BaseCommand extends Command {
     this.ctx = createAppContext();
   }
 
-  async getClient() {
+  async getKraneClient() {
     await this.ctx.init();
     if (this.ctx.serverEndpoint == "") {
       throw new Error("Krane endpoint required");

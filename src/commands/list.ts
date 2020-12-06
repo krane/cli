@@ -9,7 +9,7 @@ export default class List extends BaseCommand {
   async run() {
     let deployments;
     try {
-      const client = await this.getClient();
+      const client = await this.getKraneClient();
       deployments = await client.getDeployments();
     } catch (e) {
       this.error(`${e}`);

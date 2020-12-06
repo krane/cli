@@ -36,7 +36,7 @@ export default class Deploy extends BaseCommand {
         config.scale = 1;
       }
 
-      const client = await this.getClient();
+      const client = await this.getKraneClient();
       await client.applyDeployment(config);
     } catch (e) {
       this.error(`Unable to apply deployment configuration`);

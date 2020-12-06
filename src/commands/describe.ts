@@ -25,7 +25,7 @@ export default class Describe extends BaseCommand {
 
     let containers;
     try {
-      const client = await this.getClient();
+      const client = await this.getKraneClient();
       containers = await client.getContainers(args.deployment);
     } catch (e) {
       this.error(`Unable to describe deployment ${args.deployment}`);
