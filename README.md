@@ -14,4 +14,6 @@ npm i -g @krane/cli
 
 ## Contributing
 
-The Krane CLI is written in Typescript using the [OCLIF](https://oclif.io/) framework. The exposed commands are located inside /src/commands/.
+The Krane CLI is written in Typescript using the [OCLIF](https://oclif.io/) framework.
+
+Commands are located under `/src/commands/`
