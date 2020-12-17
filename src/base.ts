@@ -1,3 +1,6 @@
+import * as os from "os";
+import * as path from "path";
+
 import { Command } from "@oclif/command";
 import { IConfig } from "@oclif/config";
 
@@ -6,6 +9,7 @@ import { AppContext, createAppContext } from "./context/Context";
 
 export default abstract class BaseCommand extends Command {
   protected ctx: AppContext;
+  protected dotConfigDir = path.resolve(os.homedir(), ".krane");
 
   constructor(argv: string[], config: IConfig) {
     super(argv, config);

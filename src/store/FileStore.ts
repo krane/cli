@@ -29,6 +29,6 @@ export abstract class FileStore<T> {
     return this.parse(fCont);
   }
 
-  abstract async parse(data: string): Promise<T>;
-  abstract async serialize(data: T): Promise<string>;
+  abstract parse(data: string): Promise<T>;
+  abstract serialize(data: T): Promise<string>;
 }
