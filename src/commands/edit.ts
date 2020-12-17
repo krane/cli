@@ -12,7 +12,7 @@ const writeFile = promisify(fs.writeFile);
 const removeFile = promisify(fs.unlink);
 
 export default class Edit extends BaseCommand {
-  private editor = process.env.EDITOR || "vi";
+  private editor = process.env.EDITOR || "vim";
 
   static description = "Edit a deployment";
 
