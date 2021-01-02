@@ -10,7 +10,7 @@ import BaseCommand from "../base";
 const readFile = util.promisify(fs.readFile);
 
 export default class Deploy extends BaseCommand {
-  static description = "Create or update a deployment";
+  static description = "Create or run a deployment";
 
   static flags = {
     file: flags.string({ char: "f" }), // --file or -f
@@ -23,23 +23,24 @@ export default class Deploy extends BaseCommand {
 
     const config = await this.loadDeploymentConfig(flags.file);
 
+    if (flags.tag) {
+      config.tag = flags.tag;
+    }
+
+    if (flags.scale) {
+      config.scale = parseInt(flags.scale);
+    }
+
+    if (config.scale == null) {
+      config.scale = 1;
+    }
+
     try {
-      if (flags.tag) {
-        config.tag = flags.tag;
-      }
-
-      if (flags.scale) {
-        config.scale = parseInt(flags.scale);
-      }
-
-      if (config.scale == null) {
-        config.scale = 1;
-      }
-
       const client = await this.getKraneClient();
-      await client.applyDeployment(config);
+      await client.saveDeployment(config);
+      await client.runDeployment(config.name);
     } catch (e) {
-      this.error(`Unable to apply deployment configuration`);
+      this.error(`Unable to deploy ${config.name} ${e?.response?.data || ""}`);
     }
   }
 

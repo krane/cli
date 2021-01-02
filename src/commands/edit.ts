@@ -1,9 +1,10 @@
 import * as path from "path";
 import * as fs from "fs";
-import * as child_process from "child_process";
 
 import { promisify } from "util";
-import { Config, KraneClient } from "@krane/common";
+import { spawn, SpawnOptions } from "child_process";
+
+import { Config } from "@krane/common";
 
 import BaseCommand from "../base";
 
@@ -27,25 +28,25 @@ export default class Edit extends BaseCommand {
   async run() {
     const { args } = this.parse(Edit);
 
-    let client: KraneClient;
-    let deploymentConfig;
+    const client = await this.getKraneClient();
+
+    let config: Config;
     try {
-      client = await this.getKraneClient();
-      deploymentConfig = await client.getDeployment(args.deployment);
+      config = await client.getDeployment(args.deployment);
     } catch (e) {
-      this.error(`${e}`);
+      this.error(`${e?.response?.data}`);
     }
 
-    const filepath = await this.save(deploymentConfig);
+    const filepath = await this.save(config);
 
-    const child = child_process.spawn(this.editor, [filepath], {
-      stdio: "inherit",
-    });
+    const options: SpawnOptions = { stdio: "inherit" };
+    const proc = spawn(this.editor, [filepath], options);
 
-    child.on("exit", async () => {
+    proc.on("exit", async () => {
       const rawConfig = await readFile(filepath, "utf8");
       const parsedConfig = JSON.parse(rawConfig) as Config;
-      await client.applyDeployment(parsedConfig);
+      await client.saveDeployment(parsedConfig);
+      await client.runDeployment(parsedConfig.name);
       await removeFile(filepath);
     });
   }

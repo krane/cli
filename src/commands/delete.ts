@@ -18,7 +18,7 @@ export default class Delete extends BaseCommand {
       const client = await this.getKraneClient();
       await client.deleteDeployment(args.deployment);
     } catch (e) {
-      this.error(`Unable to delete deployment ${args.deployment}`);
+      this.error(`Unable to delete ${args.deployment} ${e.response?.data}`);
     }
   }
 }

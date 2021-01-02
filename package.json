@@ -1,6 +1,6 @@
 {
   "name": "@krane/cli",
-  "version": "0.2.6",
+  "version": "0.2.7",
   "description": "A command-line tool for working with Krane.",
   "bugs": "https://github.com/krane/cli/issues",
   "homepage": "https://github.com/krane/cli",
@@ -12,7 +12,7 @@
     "krane": "./bin/run"
   },
   "dependencies": {
-    "@krane/common": "0.3.4",
+    "@krane/common": "0.3.8",
     "@oclif/command": "^1.8.0",
     "@oclif/config": "^1.15.1",
     "@oclif/plugin-help": "^2.2.3",

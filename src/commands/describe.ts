@@ -20,13 +20,12 @@ export default class Describe extends BaseCommand {
   ];
 
   async run() {
-    await this.ctx.init();
     const { args } = this.parse(Describe);
 
     let containers;
     try {
       const client = await this.getKraneClient();
-      containers = await client.getContainers(args.deployment);
+      containers = await client.getDeploymentContainers(args.deployment);
     } catch (e) {
       this.error(`Unable to describe deployment ${args.deployment}`);
     }
@@ -64,13 +63,13 @@ export default class Describe extends BaseCommand {
   }
 
   logFormattedContainerInfo(container: Container) {
+    this.log(`Status: ${container.state.status.toUpperCase()}`);
     this.log(`Container: ${container.name}`);
     this.log(`ContainerId: ${container.id}`);
-    this.log(`Status: ${container.state.status.toUpperCase()}`);
     this.log(`Image: ${container.image}`);
     this.log(`ImageId: ${container.image_id}`);
-    this.log(`Command: ${container.command}`);
-    this.log(`Entrypoint: ${container.entrypoint}`);
+    this.log(`Command: ${container.command ?? ""}`);
+    this.log(`Entrypoint: ${container.entrypoint ?? ""}`);
 
     // ports
     const portCount = container.ports.length;
