@@ -18,9 +18,7 @@ export default class Restart extends BaseCommand {
       const client = await this.getKraneClient();
       await client.restartDeployment(args.deployment);
     } catch (e) {
-      this.error(
-        `Unable to restart ${args.deployment} ${e?.response?.data || ""}`
-      );
+      this.error(e?.response?.data ?? "Unable to restart deployment");
     }
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "@krane/cli",
-  "version": "0.2.8",
+  "version": "0.2.9",
   "description": "A command-line tool for working with Krane.",
   "bugs": "https://github.com/krane/cli/issues",
   "homepage": "https://github.com/krane/cli",
@@ -12,11 +12,10 @@
     "krane": "./bin/run"
   },
   "dependencies": {
-    "@krane/common": "0.4.2",
+    "@krane/common": "0.4.3",
     "@oclif/command": "^1.8.0",
     "@oclif/config": "^1.15.1",
     "@oclif/plugin-help": "^2.2.3",
-    "@types/lodash": "^4.14.152",
     "cli-ux": "^5.5.0",
     "inquirer": "^7.1.0",
     "jsonwebtoken": "^8.5.1",
@@ -32,8 +31,9 @@
     "eslint-config-oclif": "^3.1.0",
     "eslint-config-oclif-typescript": "^0.1.0",
     "globby": "^10.0.2",
+    "typescript": "^3.8.3",
     "ts-node": "^8.10.1",
-    "typescript": "^3.8.3"
+    "@types/lodash": "^4.14.152"
   },
   "engines": {
     "node": ">=8.0.0"

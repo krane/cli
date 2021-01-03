@@ -23,7 +23,7 @@ export default class List extends BaseCommand {
       const client = await this.getKraneClient();
       deployments = await client.getDeployments();
     } catch (e) {
-      this.error(`unable to get deployments ${e?.response?.data || ""}`);
+      this.error(e?.response?.data ?? "Unable list deployment");
     }
 
     cli.table(

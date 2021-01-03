@@ -34,7 +34,7 @@ export default class Edit extends BaseCommand {
     try {
       config = await client.getDeployment(args.deployment);
     } catch (e) {
-      this.error(`${e?.response?.data}`);
+      this.error(e?.response?.data ?? "Unable edit deployment");
     }
 
     const filepath = await this.save(config);

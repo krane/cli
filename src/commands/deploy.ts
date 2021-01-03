@@ -40,7 +40,7 @@ export default class Deploy extends BaseCommand {
       await client.saveDeployment(config);
       await client.runDeployment(config.name);
     } catch (e) {
-      this.error(`Unable to deploy ${config.name} ${e?.response?.data || ""}`);
+      this.error(e?.response?.data ?? "Unable run deployment");
     }
   }
 

@@ -1,6 +1,6 @@
 import BaseCommand from "../base";
 
-export default class Stop extends BaseCommand {
+export default class Start extends BaseCommand {
   static description = "Start containers for a deployment";
 
   static args = [
@@ -12,15 +12,13 @@ export default class Stop extends BaseCommand {
   ];
 
   async run() {
-    const { args } = this.parse(Stop);
+    const { args } = this.parse(Start);
 
     try {
       const client = await this.getKraneClient();
       await client.startDeployment(args.deployment);
     } catch (e) {
-      this.error(
-        `Unable to stop ${args.deployment} ${e?.response?.data || ""}`
-      );
+      this.error(e?.response?.data ?? "Unable to start deployment");
     }
   }
 }

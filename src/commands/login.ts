@@ -54,7 +54,10 @@ export default class Login extends BaseCommand {
 
       this.log(`Succesfully authenticated with ${this.ctx.serverEndpoint}`);
     } catch (e) {
-      this.error(`Unable to authenticate with ${this.ctx.serverEndpoint}`);
+      this.error(
+        e?.response?.data ??
+          `Unable to authenticate with ${this.ctx.serverEndpoint}`
+      );
     }
   }
 

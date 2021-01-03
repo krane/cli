@@ -65,7 +65,7 @@ export default class Secrets extends BaseCommand {
         \nFor more details on configuring secrets checkout: \nhttps://www.krane.sh/#/deployment-configuration?id=secrets`
       );
     } catch (e) {
-      this.error(`Unable to add secret for ${deploymentName}`);
+      this.error(e?.response?.data ?? "Unable to add secret");
     }
   }
 
@@ -74,7 +74,7 @@ export default class Secrets extends BaseCommand {
       const client = await this.getKraneClient();
       await client.deleteDeploymentSecret(deploymentName, key);
     } catch (e) {
-      this.error(`Unable to remove secret ${key}`);
+      this.error(e?.response?.data ?? "Unable to remove secret");
     }
   }
 
@@ -93,7 +93,7 @@ export default class Secrets extends BaseCommand {
         },
       });
     } catch (e) {
-      this.error(`Unable to get secrets for ${deploymentName}`);
+      this.error(e?.response?.data ?? "Unable to list secrets");
     }
   }
 }
