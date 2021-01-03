@@ -17,7 +17,7 @@ export default class Logs extends BaseCommand {
 
     try {
       const socket = client.streamContainerLogs(args.container);
-      socket.onmessage = (e: MessageEvent<string>) => this.log(e.data);
+      socket.onmessage = (e: MessageEvent) => this.log(e.data);
     } catch (e) {
       this.error(e?.response?.data ?? "Unable to read container logs");
     }
