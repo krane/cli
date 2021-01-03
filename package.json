@@ -1,18 +1,18 @@
 {
   "name": "@krane/cli",
-  "version": "0.2.9",
+  "version": "0.3.0",
   "description": "A command-line tool for working with Krane.",
   "bugs": "https://github.com/krane/cli/issues",
   "homepage": "https://github.com/krane/cli",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
-  "author": "biensupernice",
+  "author": "Krane",
   "license": "unlicense",
   "bin": {
     "krane": "./bin/run"
   },
   "dependencies": {
-    "@krane/common": "0.4.3",
+    "@krane/common": "0.4.5",
     "@oclif/command": "^1.8.0",
     "@oclif/config": "^1.15.1",
     "@oclif/plugin-help": "^2.2.3",

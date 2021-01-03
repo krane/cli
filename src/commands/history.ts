@@ -31,10 +31,6 @@ export default class History extends BaseCommand {
 
   logTable(jobs: Job[]) {
     cli.table(jobs, {
-      action: {
-        get: (job) => job.type.replace("_", " ").toLowerCase(),
-        minWidth: 11,
-      },
       executed: {
         get: (job) => {
           const date = this.epochToDate(job.start_time_epoch);
@@ -44,6 +40,10 @@ export default class History extends BaseCommand {
             .replace(" ", "")}`;
         },
         minWidth: 21,
+      },
+      action: {
+        get: (job) => job.type.replace("_", " ").toLowerCase(),
+        minWidth: 11,
       },
       state: {
         get: (job) => job.state.toString().toLowerCase(),
