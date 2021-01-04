@@ -7,6 +7,7 @@ export default class List extends BaseCommand {
   static description = "List deployments";
 
   static aliases = ["ls"];
+
   static flags = {
     internal: flags.boolean({
       char: "i",
@@ -39,10 +40,14 @@ export default class List extends BaseCommand {
         },
         tag: {
           get: (deployment) => deployment.tag,
-          minWidth: 20,
+          minWidth: 10,
         },
         scale: {
           get: (deployment) => deployment.scale,
+          minWidth: 10,
+        },
+        secure: {
+          get: (deployment) => deployment.secure,
           minWidth: 10,
         },
         internal: {

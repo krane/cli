@@ -1,6 +1,6 @@
 {
   "name": "@krane/cli",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "A command-line tool for working with Krane.",
   "bugs": "https://github.com/krane/cli/issues",
   "homepage": "https://github.com/krane/cli",

@@ -3,8 +3,8 @@ import { Container } from "@krane/common";
 
 import BaseCommand from "../base";
 
-export default class Describe extends BaseCommand {
-  static description = "Describe a deployment";
+export default class Status extends BaseCommand {
+  static description = "Get the status of a deployment";
 
   static args = [
     {
@@ -20,7 +20,7 @@ export default class Describe extends BaseCommand {
   ];
 
   async run() {
-    const { args } = this.parse(Describe);
+    const { args } = this.parse(Status);
 
     let containers;
     try {
@@ -96,19 +96,19 @@ export default class Describe extends BaseCommand {
     );
   }
 
-  minuteDifference(date: number): number {
-    const diffMs = Date.now() - new Date(0).setUTCSeconds(date);
-    const minutesAgo = Math.round(((diffMs % 86400000) % 3600000) / 60000);
-    return minutesAgo;
+  minuteDifference(epoch: number): number {
+    const diffMs = Math.abs(Date.now() - new Date(epoch * 1000).getTime());
+    var diffMins = Math.round(((diffMs % 86400000) % 3600000) / 60000); // minutes
+    return diffMins;
   }
 
-  hourDifference(date: number): number {
-    const diffMs = Date.now() - new Date(0).setUTCSeconds(date);
+  hourDifference(epoch: number): number {
+    const diffMs = Math.abs(Date.now() - new Date(epoch * 1000).getTime());
     return Math.floor((diffMs % 86400000) / 3600000);
   }
 
-  daysDifference(date: number): number {
-    const diffMs = Date.now() - new Date(0).setUTCSeconds(date);
+  daysDifference(epoch: number): number {
+    const diffMs = Math.abs(Date.now() - new Date(epoch * 1000).getTime());
     return Math.floor((diffMs % 86400000) / 3600000);
   }
 }

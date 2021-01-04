@@ -1,7 +1,9 @@
 import BaseCommand from "../base";
 
-export default class Delete extends BaseCommand {
-  static description = "Delete a deployment";
+export default class Remove extends BaseCommand {
+  static description = "Remove a deployment";
+
+  static aliases = ["rm"];
 
   static args = [
     {
@@ -12,7 +14,7 @@ export default class Delete extends BaseCommand {
   ];
 
   async run() {
-    const { args } = this.parse(Delete);
+    const { args } = this.parse(Remove);
 
     try {
       const client = await this.getKraneClient();
