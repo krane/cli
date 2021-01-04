@@ -52,6 +52,10 @@ export default class History extends BaseCommand {
 
   logJobsTable(jobs: Job[]) {
     cli.table(jobs, {
+      status: {
+        get: (job) => (job.status.failure_count > 0 ? "error" : "ok"),
+        minWidth: 8,
+      },
       executed: {
         get: (job) => {
           const date = this.epochToDate(job.start_time_epoch);
@@ -68,7 +72,7 @@ export default class History extends BaseCommand {
       },
       state: {
         get: (job) => job.state.toString().toLowerCase(),
-        minWidth: 10,
+        minWidth: 12,
       },
       failures: {
         get: (job) => `${job.status.failure_count}`,
