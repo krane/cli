@@ -11,25 +11,46 @@ export default class History extends BaseCommand {
       required: true,
       description: "Name of the deployment",
     },
+    {
+      name: "job",
+      required: false,
+      description: "Deployment job id",
+    },
   ];
 
   async run() {
     const { args } = this.parse(History);
 
-    let jobs: Job[];
-    try {
-      const client = await this.getKraneClient();
-      jobs = await client.getJobs(args.deployment);
-    } catch (e) {
-      this.error(e?.response?.data ?? "unable to delete deployment");
-    }
+    const client = await this.getKraneClient();
 
-    // grab the 25 most recent jobs
-    const recentJobs = jobs.reverse().slice(0, 25);
-    this.logTable(recentJobs);
+    try {
+      if (args.job) {
+        const job = await client.getJobById(args.deployment, args.job);
+        this.logJobTable(job);
+        return;
+      }
+
+      const jobs = await client.getJobs(args.deployment);
+      const recentJobs = jobs.reverse().slice(0, 25);
+      this.logJobsTable(recentJobs);
+    } catch (e) {
+      this.error(e?.response?.data ?? "unable to get deployment history");
+    }
   }
 
-  logTable(jobs: Job[]) {
+  logJobTable(job: Job) {
+    cli.table(job.status.failures, {
+      number: {
+        get: (failure) => `${failure.execution}/${job.retry_policy}`,
+        header: "#",
+      },
+      message: {
+        get: (failure) => failure.message,
+      },
+    });
+  }
+
+  logJobsTable(jobs: Job[]) {
     cli.table(jobs, {
       executed: {
         get: (job) => {
