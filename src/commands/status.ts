@@ -102,11 +102,11 @@ export default class Status extends BaseCommand {
     const hoursDiff = Math.floor(diffMs / 1000 / 60 / 60);
     const daysDiff = Math.floor(diffMs / 1000 / 60 / 60 / 60);
 
-    if (minutesDiff < 60) {
+    if (minutesDiff <= 60) {
       return `${minutesDiff} minute(s) ago`;
     }
 
-    if (hoursDiff < 24) {
+    if (hoursDiff <= 24) {
       return `${hoursDiff} hours(s) ago`;
     }
 
