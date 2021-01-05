@@ -55,7 +55,7 @@ export default class Status extends BaseCommand {
         minWidth: 20,
       },
       up: {
-        get: (container) => `${this.formattedDate(container.created_at)}`,
+        get: (container) => `${this.calculateTimeDiff(container.created_at)}`,
         minWidth: 15,
       },
     });

@@ -7,7 +7,6 @@
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "author": "Krane",
-  "license": "unlicense",
   "bin": {
     "krane": "./bin/run"
   },
