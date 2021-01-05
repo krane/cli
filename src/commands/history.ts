@@ -39,6 +39,20 @@ export default class History extends BaseCommand {
   }
 
   logJobTable(job: Job) {
+    const start = this.epochToDate(job.start_time_epoch);
+
+    this.log(`Deployment: ${job.deployment}`);
+    this.log(
+      `Executed: ${start.toLocaleDateString()} ${start
+        .toLocaleTimeString()
+        .toLowerCase()
+        .replace(" ", "")}`
+    );
+    this.log(`Type: ${job.type}`);
+    this.log(`Status: ${job.state}`);
+    this.log(`Error count: ${job.status.failure_count}`);
+    this.log(`Retry policy: ${job.retry_policy}`);
+
     cli.table(job.status.failures, {
       number: {
         get: (failure) => `${failure.execution}/${job.retry_policy}`,
@@ -54,21 +68,15 @@ export default class History extends BaseCommand {
     cli.table(jobs, {
       status: {
         get: (job) => (job.status.failure_count > 0 ? "error" : "ok"),
-        minWidth: 8,
+        minWidth: 10,
       },
-      executed: {
-        get: (job) => {
-          const date = this.epochToDate(job.start_time_epoch);
-          return `${date.toLocaleDateString()} ${date
-            .toLocaleTimeString()
-            .toLowerCase()
-            .replace(" ", "")}`;
-        },
-        minWidth: 21,
+      Started: {
+        get: (job) => this.calculateTimeDiff(job.start_time_epoch),
+        minWidth: 18,
       },
       action: {
         get: (job) => job.type.replace("_", " ").toLowerCase(),
-        minWidth: 11,
+        minWidth: 20,
       },
       state: {
         get: (job) => job.state.toString().toLowerCase(),
@@ -87,5 +95,23 @@ export default class History extends BaseCommand {
 
   epochToDate(epoch: number) {
     return new Date(epoch * 1000);
+  }
+
+  calculateTimeDiff(epoch: number) {
+    const diffMs = new Date().valueOf() - new Date(epoch * 1000).valueOf();
+
+    const minutesDiff = Math.floor(diffMs / 1000 / 60);
+    const hoursDiff = Math.floor(diffMs / 1000 / 60 / 60);
+    const daysDiff = Math.floor(diffMs / 1000 / 60 / 60 / 60);
+
+    if (minutesDiff < 60) {
+      return `${minutesDiff} minute(s) ago`;
+    }
+
+    if (hoursDiff < 24) {
+      return `${hoursDiff} hours(s) ago`;
+    }
+
+    return `${daysDiff} day(s) ago`;
   }
 }

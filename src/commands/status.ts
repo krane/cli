@@ -37,7 +37,7 @@ export default class Status extends BaseCommand {
       if (!filteredContainer) {
         this.error(`Unable to find container ${args.container}`);
       }
-      this.logFormattedContainerInfo(filteredContainer);
+      this.logContainerTable(filteredContainer);
       return;
     }
 
@@ -55,14 +55,13 @@ export default class Status extends BaseCommand {
         minWidth: 20,
       },
       up: {
-        get: (container) =>
-          `${this.minuteDifference(container.created_at)} minute(s) ago`,
+        get: (container) => `${this.formattedDate(container.created_at)}`,
         minWidth: 15,
       },
     });
   }
 
-  logFormattedContainerInfo(container: Container) {
+  logContainerTable(container: Container) {
     this.log(`Status: ${container.state.status.toUpperCase()}`);
     this.log(`Container: ${container.name}`);
     this.log(`ContainerId: ${container.id}`);
@@ -96,19 +95,21 @@ export default class Status extends BaseCommand {
     );
   }
 
-  minuteDifference(epoch: number): number {
-    const diffMs = Math.abs(Date.now() - new Date(epoch * 1000).getTime());
-    var diffMins = Math.round(((diffMs % 86400000) % 3600000) / 60000); // minutes
-    return diffMins;
-  }
+  calculateTimeDiff(epoch: number) {
+    const diffMs = new Date().valueOf() - new Date(epoch * 1000).valueOf();
 
-  hourDifference(epoch: number): number {
-    const diffMs = Math.abs(Date.now() - new Date(epoch * 1000).getTime());
-    return Math.floor((diffMs % 86400000) / 3600000);
-  }
+    const minutesDiff = Math.floor(diffMs / 1000 / 60);
+    const hoursDiff = Math.floor(diffMs / 1000 / 60 / 60);
+    const daysDiff = Math.floor(diffMs / 1000 / 60 / 60 / 60);
 
-  daysDifference(epoch: number): number {
-    const diffMs = Math.abs(Date.now() - new Date(epoch * 1000).getTime());
-    return Math.floor((diffMs % 86400000) / 3600000);
+    if (minutesDiff < 60) {
+      return `${minutesDiff} minute(s) ago`;
+    }
+
+    if (hoursDiff < 24) {
+      return `${hoursDiff} hours(s) ago`;
+    }
+
+    return `${daysDiff} day(s) ago`;
   }
 }
