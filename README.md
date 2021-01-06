@@ -3,7 +3,6 @@
 A command-line tool for working with [Krane](https://krane.sh)
 
 [![npm version](https://badge.fury.io/js/%40krane%2Fcli.svg)](https://badge.fury.io/js/%40krane%2Fcli)
-[![publish npm](https://github.com/krane/cli/workflows/publish-npm/badge.svg)](https://github.com/krane/cli/actions)
 
 **Documentation:** https://www.krane.sh/#/cli
 
