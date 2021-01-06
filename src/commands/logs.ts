@@ -16,7 +16,7 @@ export default class Logs extends BaseCommand {
     const client = await this.getKraneClient();
 
     try {
-      const socket = client.streamContainerLogs(args.container);
+      const socket = client.readContainerLogs(args.container);
       socket.onmessage = (e: MessageEvent) => this.log(e.data);
     } catch (e) {
       this.error(e?.response?.data ?? "Unable to read container logs");

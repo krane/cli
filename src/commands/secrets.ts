@@ -55,11 +55,7 @@ export default class Secrets extends BaseCommand {
 
     try {
       const client = await this.getKraneClient();
-      const secret = await client.addDeploymentSecret(
-        deploymentName,
-        key,
-        value
-      );
+      const secret = await client.addSecret(deploymentName, key, value);
       this.log(
         `\nSecret added ✅ \nYou can refer to this secret in your krane.json with the following alias: \n${secret?.alias} 
         \nFor more details on configuring secrets checkout: \nhttps://www.krane.sh/#/deployment-configuration?id=secrets`
@@ -72,7 +68,7 @@ export default class Secrets extends BaseCommand {
   async delete(deploymentName: string, key: string) {
     try {
       const client = await this.getKraneClient();
-      await client.deleteDeploymentSecret(deploymentName, key);
+      await client.deleteSecret(deploymentName, key);
     } catch (e) {
       this.error(e?.response?.data ?? "Unable to remove secret");
     }
@@ -81,7 +77,7 @@ export default class Secrets extends BaseCommand {
   async list(deploymentName: string) {
     try {
       const client = await this.getKraneClient();
-      const secrets = await client.getDeploymentSecrets(deploymentName);
+      const secrets = await client.getSecrets(deploymentName);
       cli.table(secrets, {
         key: {
           get: (secret) => secret.key,

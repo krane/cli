@@ -25,7 +25,7 @@ export default class Status extends BaseCommand {
     let containers;
     try {
       const client = await this.getKraneClient();
-      containers = await client.getDeploymentContainers(args.deployment);
+      containers = await client.getContainers(args.deployment);
     } catch (e) {
       this.error(e?.response?.data ?? "Unable to describe deployment");
     }
