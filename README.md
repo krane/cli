@@ -4,7 +4,7 @@ A command-line tool for working with [Krane](https://krane.sh)
 
 [![npm version](https://badge.fury.io/js/%40krane%2Fcli.svg)](https://badge.fury.io/js/%40krane%2Fcli)
 
-**Documentation:** https://www.krane.sh/#/cli
+**Documentation:** https://www.krane.sh/#/docs/cli
 
 ## Install
 
