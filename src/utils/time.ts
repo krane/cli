@@ -13,7 +13,7 @@ export const calculateTimeDiff = (epoch: number) => {
     return `${hoursDiff} hours(s) ago`;
   }
 
-  return `${daysDiff} day(s) ago`;
+  return `${daysDiff == 0 ? 1 : daysDiff} day(s) ago`;
 };
 
 export const epochToDate = (epoch: number) => {

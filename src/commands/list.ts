@@ -38,14 +38,14 @@ export default class List extends BaseCommand {
         up: {
           get: (deployment) =>
             `${deployment.containers.length}/${deployment.scale}`,
-          minWidth: 8,
+          minWidth: 6,
         },
         updated: {
           get: (deployment) => {
             const latestJob = deployment.jobs[deployment.jobs.length - 1];
             return calculateTimeDiff(latestJob.start_time_epoch);
           },
-          minWidth: 18,
+          minWidth: 15,
         },
         secure: {
           get: (deployment) => deployment.secure,
