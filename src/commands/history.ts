@@ -1,6 +1,8 @@
 import { cli } from "cli-ux";
 import { Job } from "@krane/common";
+
 import BaseCommand from "../base";
+import { calculateTimeDiff, epochToDate } from "./../utils/time";
 
 export default class History extends BaseCommand {
   static description = "Get the history for a deployment";
@@ -39,7 +41,7 @@ export default class History extends BaseCommand {
   }
 
   logJobTable(job: Job) {
-    const start = this.epochToDate(job.start_time_epoch);
+    const start = epochToDate(job.start_time_epoch);
 
     this.log(`Deployment: ${job.deployment}`);
     this.log(
@@ -71,7 +73,7 @@ export default class History extends BaseCommand {
         minWidth: 10,
       },
       Started: {
-        get: (job) => this.calculateTimeDiff(job.start_time_epoch),
+        get: (job) => calculateTimeDiff(job.start_time_epoch),
         minWidth: 18,
       },
       action: {
@@ -91,27 +93,5 @@ export default class History extends BaseCommand {
         header: "Job Id",
       },
     });
-  }
-
-  epochToDate(epoch: number) {
-    return new Date(epoch * 1000);
-  }
-
-  calculateTimeDiff(epoch: number) {
-    const diffMs = new Date().valueOf() - new Date(epoch * 1000).valueOf();
-
-    const minutesDiff = Math.floor(diffMs / 1000 / 60);
-    const hoursDiff = Math.floor(diffMs / 1000 / 60 / 60);
-    const daysDiff = Math.floor(diffMs / 1000 / 60 / 60 / 60);
-
-    if (minutesDiff < 60) {
-      return `${minutesDiff} minute(s) ago`;
-    }
-
-    if (hoursDiff < 24) {
-      return `${hoursDiff} hours(s) ago`;
-    }
-
-    return `${daysDiff} day(s) ago`;
   }
 }

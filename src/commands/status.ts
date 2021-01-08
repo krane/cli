@@ -2,6 +2,7 @@ import { cli } from "cli-ux";
 import { Container } from "@krane/common";
 
 import BaseCommand from "../base";
+import { calculateTimeDiff } from "./../utils/time";
 
 export default class Status extends BaseCommand {
   static description = "Get the status of a deployment";
@@ -50,13 +51,13 @@ export default class Status extends BaseCommand {
         get: (container) => container.state.status,
         minWidth: 10,
       },
+      updated: {
+        get: (container) => `${calculateTimeDiff(container.created_at)}`,
+        minWidth: 18,
+      },
       container: {
         get: (container) => container.name,
         minWidth: 20,
-      },
-      up: {
-        get: (container) => `${this.calculateTimeDiff(container.created_at)}`,
-        minWidth: 15,
       },
     });
   }
@@ -93,23 +94,5 @@ export default class Status extends BaseCommand {
         ([key, value]) => `\n- ${key} → ${value}`
       )}`
     );
-  }
-
-  calculateTimeDiff(epoch: number) {
-    const diffMs = new Date().valueOf() - new Date(epoch * 1000).valueOf();
-
-    const minutesDiff = Math.floor(diffMs / 1000 / 60);
-    const hoursDiff = Math.floor(diffMs / 1000 / 60 / 60);
-    const daysDiff = Math.floor(diffMs / 1000 / 60 / 60 / 60);
-
-    if (minutesDiff <= 60) {
-      return `${minutesDiff} minute(s) ago`;
-    }
-
-    if (hoursDiff <= 24) {
-      return `${hoursDiff} hours(s) ago`;
-    }
-
-    return `${daysDiff} day(s) ago`;
   }
 }

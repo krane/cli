@@ -2,6 +2,7 @@ import { flags } from "@oclif/command";
 import { cli } from "cli-ux";
 
 import BaseCommand from "../base";
+import { calculateTimeDiff } from "./../utils/time";
 
 export default class List extends BaseCommand {
   static description = "List deployments";
@@ -32,24 +33,33 @@ export default class List extends BaseCommand {
       {
         name: {
           get: (deployment) => deployment.name,
-          minWidth: 20,
-        },
-        image: {
-          get: (deployment) => deployment.image,
-          minWidth: 30,
-        },
-        tag: {
-          get: (deployment) => deployment.tag,
           minWidth: 10,
         },
-        scale: {
-          get: (deployment) => deployment.scale,
-          minWidth: 10,
+        up: {
+          get: (deployment) =>
+            `${deployment.containers.length}/${deployment.scale}`,
+          minWidth: 8,
+        },
+        updated: {
+          get: (deployment) => {
+            const latestJob = deployment.jobs[deployment.jobs.length - 1];
+            return calculateTimeDiff(latestJob.start_time_epoch);
+          },
+          minWidth: 18,
         },
         secure: {
           get: (deployment) => deployment.secure,
           minWidth: 10,
         },
+        tag: {
+          get: (deployment) => deployment.tag,
+          minWidth: 10,
+        },
+        image: {
+          get: (deployment) => deployment.image,
+          minWidth: 20,
+        },
+
         internal: {
           get: (deployment) => deployment.internal,
           extended: true,
