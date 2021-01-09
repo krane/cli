@@ -23,9 +23,10 @@ export default class Status extends BaseCommand {
   async run() {
     const { args } = this.parse(Status);
 
+    const client = await this.getKraneClient();
+
     let containers;
     try {
-      const client = await this.getKraneClient();
       containers = await client.getContainers(args.deployment);
     } catch (e) {
       this.error(e?.response?.data ?? "Unable to describe deployment");

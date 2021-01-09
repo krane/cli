@@ -2,6 +2,7 @@ import * as path from "path";
 import * as fs from "fs";
 
 import { promisify } from "util";
+import { isEqual } from "lodash";
 import { spawn, SpawnOptions } from "child_process";
 
 import { Config, Deployment } from "@krane/common";
@@ -46,6 +47,13 @@ export default class Edit extends BaseCommand {
     proc.on("exit", async () => {
       const rawConfig = await readFile(filepath, "utf8");
       const parsedConfig = JSON.parse(rawConfig) as Config;
+
+      if (isEqual(parsedConfig, deployment.config)) {
+        this.log("Deployment configuration unchanged...");
+        return;
+      }
+
+      this.log("Deployment configuration updated...");
       await client.saveDeployment(parsedConfig);
       await client.runDeployment(parsedConfig.name);
       await removeFile(filepath);

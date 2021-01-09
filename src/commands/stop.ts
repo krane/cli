@@ -14,8 +14,9 @@ export default class Stop extends BaseCommand {
   async run() {
     const { args } = this.parse(Stop);
 
+    const client = await this.getKraneClient();
+
     try {
-      const client = await this.getKraneClient();
       await client.stopDeployment(args.deployment);
     } catch (e) {
       this.error(e?.response?.data ?? "Unable to stop deployment");

@@ -45,7 +45,7 @@ export default class List extends BaseCommand {
             const latestJob = deployment.jobs[deployment.jobs.length - 1];
             return calculateTimeDiff(latestJob.start_time_epoch);
           },
-          minWidth: 15,
+          minWidth: 18,
         },
         secure: {
           get: (deployment) => deployment.config.secure,

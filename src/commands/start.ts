@@ -14,8 +14,9 @@ export default class Start extends BaseCommand {
   async run() {
     const { args } = this.parse(Start);
 
+    const client = await this.getKraneClient();
+
     try {
-      const client = await this.getKraneClient();
       await client.startDeployment(args.deployment);
     } catch (e) {
       this.error(e?.response?.data ?? "Unable to start deployment");

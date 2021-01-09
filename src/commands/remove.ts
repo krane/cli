@@ -16,8 +16,9 @@ export default class Remove extends BaseCommand {
   async run() {
     const { args } = this.parse(Remove);
 
+    const client = await this.getKraneClient();
+
     try {
-      const client = await this.getKraneClient();
       await client.deleteDeployment(args.deployment);
     } catch (e) {
       this.error(e?.response?.data ?? "Unable delete deployment");

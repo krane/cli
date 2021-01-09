@@ -31,9 +31,9 @@ export default class Login extends BaseCommand {
     this.ctx.setEndpoint(endpoint);
     await this.ctx.save();
 
-    try {
-      const client = await this.getKraneClient();
+    const client = await this.getKraneClient();
 
+    try {
       const { request_id, phrase: serverPhrase } = await client.login();
 
       const { key, passphrase } = await this.getPrivateKeyAndPhrase();

@@ -14,8 +14,9 @@ export default class Restart extends BaseCommand {
   async run() {
     const { args } = this.parse(Restart);
 
+    const client = await this.getKraneClient();
+
     try {
-      const client = await this.getKraneClient();
       await client.restartDeployment(args.deployment);
     } catch (e) {
       this.error(e?.response?.data ?? "Unable to restart deployment");

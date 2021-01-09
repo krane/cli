@@ -13,6 +13,7 @@ export default class Logs extends BaseCommand {
 
   async run() {
     const { args } = this.parse(Logs);
+
     const client = await this.getKraneClient();
 
     try {
