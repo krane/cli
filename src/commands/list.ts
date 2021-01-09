@@ -32,12 +32,12 @@ export default class List extends BaseCommand {
       deployments,
       {
         name: {
-          get: (deployment) => deployment.name,
+          get: (deployment) => deployment.config.name,
           minWidth: 10,
         },
         up: {
           get: (deployment) =>
-            `${deployment.containers.length}/${deployment.scale}`,
+            `${deployment.containers.length}/${deployment.config.scale}`,
           minWidth: 6,
         },
         updated: {
@@ -48,20 +48,20 @@ export default class List extends BaseCommand {
           minWidth: 15,
         },
         secure: {
-          get: (deployment) => deployment.secure,
+          get: (deployment) => deployment.config.secure,
           minWidth: 10,
         },
         tag: {
-          get: (deployment) => deployment.tag,
+          get: (deployment) => deployment.config.tag,
           minWidth: 10,
         },
         image: {
-          get: (deployment) => deployment.image,
+          get: (deployment) => deployment.config.image,
           minWidth: 20,
         },
 
         internal: {
-          get: (deployment) => deployment.internal,
+          get: (deployment) => deployment.config.internal,
           extended: true,
         },
       },

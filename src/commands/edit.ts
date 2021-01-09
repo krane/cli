@@ -4,7 +4,7 @@ import * as fs from "fs";
 import { promisify } from "util";
 import { spawn, SpawnOptions } from "child_process";
 
-import { Config } from "@krane/common";
+import { Config, Deployment } from "@krane/common";
 
 import BaseCommand from "../base";
 
@@ -30,14 +30,15 @@ export default class Edit extends BaseCommand {
 
     const client = await this.getKraneClient();
 
-    let config: Config;
+    let deployment: Deployment;
     try {
-      config = await client.getDeployment(args.deployment);
+      deployment = await client.getDeployment(args.deployment);
     } catch (e) {
       this.error(e?.response?.data ?? "Unable edit deployment");
     }
 
-    const filepath = await this.save(config);
+    // save a temporary copy on the host to allow editing on an editor
+    const filepath = await this.save(deployment.config);
 
     const options: SpawnOptions = { stdio: "inherit" };
     const proc = spawn(this.editor, [filepath], options);
