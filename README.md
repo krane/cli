@@ -14,6 +14,12 @@ You can install the Krane CLI using [npm](https://www.npmjs.com/). The following
 npm i -g krane
 ```
 
+and to update
+
+```
+npm update -g krane
+```
+
 ## Contributing
 
 The Krane CLI is written in Typescript using the [OCLIF](https://oclif.io/) framework.
