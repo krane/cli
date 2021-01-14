@@ -1,7 +1,7 @@
 {
-  "name": "@krane/cli",
-  "version": "0.4.1",
-  "description": "A command-line tool for working with Krane.",
+  "name": "krane",
+  "version": "0.4.3",
+  "description": "The Krane CLI",
   "bugs": "https://github.com/krane/cli/issues",
   "homepage": "https://github.com/krane/cli",
   "main": "lib/index.js",
@@ -11,18 +11,18 @@
     "krane": "./bin/run"
   },
   "dependencies": {
-    "@krane/common": "0.4.9",
+    "@krane/common": "0.5.0",
     "@oclif/command": "^1.8.0",
     "@oclif/config": "^1.15.1",
     "@oclif/plugin-help": "^2.2.3",
     "cli-ux": "^5.5.0",
     "inquirer": "^7.1.0",
     "jsonwebtoken": "^8.5.1",
-    "lodash": "^4.17.15",
-    "tslib": "^1.11.1"
+    "lodash": "^4.17.15"
   },
   "devDependencies": {
     "@oclif/dev-cli": "^1.22.2",
+    "tslib": "^1.11.1",
     "@types/inquirer": "^6.5.0",
     "@types/jsonwebtoken": "^8.3.9",
     "@types/node": "^10.17.21",
@@ -44,7 +44,10 @@
     "/oclif.manifest.json"
   ],
   "keywords": [
-    "oclif"
+    "containers",
+    "docker",
+    "deployments",
+    "container management"
   ],
   "oclif": {
     "commands": "./lib/commands",
@@ -60,7 +63,7 @@
   "scripts": {
     "postpack": "rm -f oclif.manifest.json",
     "posttest": "eslint . --ext .ts --config .eslintrc",
-    "prepack": "rm -rf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
+    "prepack": "rm -rf lib && tsc -b && oclif-dev manifest",
     "test": "echo NO TESTS",
     "version": "oclif-dev readme && git add README.md"
   },

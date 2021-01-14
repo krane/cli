@@ -1,15 +1,17 @@
 ![CLI](https://res.cloudinary.com/biensupernice/image/upload/v1602471644/Marketing_-_Krane_CLI_zfw8vh.png)
 
-A command-line tool for working with [Krane](https://krane.sh)
+A command-line tool for working with [Krane](https://krane.sh).
 
-[![npm version](https://badge.fury.io/js/%40krane%2Fcli.svg)](https://badge.fury.io/js/%40krane%2Fcli)
+[![npm version](https://img.shields.io/npm/v/krane?color=bright-green&label=npm)](https://www.npmjs.com/package/krane)
 
 **Documentation:** https://www.krane.sh/#/docs/cli
 
 ## Install
 
+You can install the Krane CLI using [npm](https://www.npmjs.com/). The following command will install the cli globally allowing you to run `krane` commands from anywhere on your machine.
+
 ```
-npm i -g @krane/cli
+npm i -g krane
 ```
 
 ## Contributing
