@@ -49,11 +49,14 @@ export default class Edit extends BaseCommand {
       const parsedConfig = JSON.parse(rawConfig) as Config;
 
       if (isEqual(parsedConfig, deployment.config)) {
-        this.log("Deployment configuration unchanged...");
+        this.log("Deployment configuration unchanged. Nothing to do.");
         return;
       }
 
-      this.log("Deployment configuration updated...");
+      this.log(
+        "Deployment configuration updated. Triggering new deployment run."
+      );
+
       await client.saveDeployment(parsedConfig);
       await client.runDeployment(parsedConfig.name);
       await removeFile(filepath);
