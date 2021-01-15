@@ -2,7 +2,7 @@
 
 A command-line tool for working with [Krane](https://krane.sh).
 
-[![npm version](https://img.shields.io/npm/v/krane?color=green&label=npm)](https://www.npmjs.com/package/krane)
+[![npm version](https://img.shields.io/npm/v/krane?color=#D0BB79&label=npm)](https://www.npmjs.com/package/krane)
 
 **Documentation:** https://www.krane.sh/#/docs/cli
 
