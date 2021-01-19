@@ -5,7 +5,12 @@ import BaseCommand from "../base";
 import { calculateTimeDiff, epochToDate } from "./../utils/time";
 
 export default class History extends BaseCommand {
-  static description = "Get the history for a deployment";
+  static description = "Get recent activity for a deployment";
+
+  static examples = [
+    "$ krane history <my-deployment>",
+    "$ krane history <my-deployment> <job-id>",
+  ];
 
   static args = [
     {

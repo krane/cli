@@ -16,7 +16,10 @@ const removeFile = promisify(fs.unlink);
 export default class Edit extends BaseCommand {
   private editor = process.env.EDITOR || "vim";
 
-  static description = "Edit a deployment";
+  static description = `Edit a deployments configuration
+  Check out https://www.krane.sh/#/docs/deployment for additional documentation`;
+
+  static usage = "edit <my-deployment>";
 
   static args = [
     {

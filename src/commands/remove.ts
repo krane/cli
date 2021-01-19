@@ -1,7 +1,8 @@
 import BaseCommand from "../base";
 
 export default class Remove extends BaseCommand {
-  static description = "Remove a deployment";
+  static description =
+    "Remove a deployment and it resources (containers, secrets, history etc..)";
 
   static aliases = ["rm"];
 

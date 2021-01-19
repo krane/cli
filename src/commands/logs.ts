@@ -3,10 +3,15 @@ import BaseCommand from "../base";
 export default class Logs extends BaseCommand {
   static description = "Stream container logs";
 
+  static usage = "logs <container-name>";
+
+  static examples = ["$ krane logs", "$ krane logs <container-name>"];
+
   static args = [
     {
       name: "container",
       required: true,
+      default: "krane",
       description: "Name of the container",
     },
   ];

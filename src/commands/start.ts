@@ -1,7 +1,7 @@
 import BaseCommand from "../base";
 
 export default class Start extends BaseCommand {
-  static description = "Start containers for a deployment";
+  static description = "Start all containers for a deployment";
 
   static args = [
     {

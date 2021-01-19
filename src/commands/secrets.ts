@@ -4,7 +4,18 @@ import { flags } from "@oclif/command";
 import BaseCommand from "../base";
 
 export default class Secrets extends BaseCommand {
-  static description = "Add, delete, or list deployment secrets.";
+  static description = `Add, delete, or list deployment secrets
+  Check out https://www.krane.sh/#/docs/cli?id=secrets for additional documentation
+  `;
+
+  static examples = [
+    "$ krane secrets ls <deployment>",
+    "$ krane secrets list <deployment>",
+    "$ krane secrets add <deployment> --key TOKEN --value super-secret-token",
+    "$ krane secrets add <deployment> -k TOKEN -v super-secret-token",
+    "$ krane secrets delete <deployment> --key TOKEN",
+    "$ krane secrets delete <deployment> -k TOKEN",
+  ];
 
   static flags = {
     key: flags.string({
@@ -21,7 +32,7 @@ export default class Secrets extends BaseCommand {
     {
       name: "subcommand",
       required: true,
-      options: ["add", "delete", "list"],
+      options: ["add", "delete", "list", "ls"],
     },
     {
       name: "deployment",
@@ -40,6 +51,7 @@ export default class Secrets extends BaseCommand {
       case "delete":
         await this.delete(args.deployment, flags.key!!);
         break;
+      case "ls":
       case "list":
         await this.list(args.deployment);
         break;

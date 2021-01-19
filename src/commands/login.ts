@@ -13,7 +13,11 @@ import BaseCommand from "../base";
 const readFile = promisify(fs.readFile);
 
 export default class Login extends BaseCommand {
-  static description = "Authenticate with a Krane server";
+  static description = `Authenticate with a Krane instance
+  Check out https://www.krane.sh/#/docs/authentication for additional documentation
+  `;
+
+  static examples = ["$ krane login", "$ krane login http://localhost:8500"];
 
   static args = [{ name: "endpoint" }];
 

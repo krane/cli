@@ -5,7 +5,8 @@ import BaseCommand from "../base";
 import { calculateTimeDiff } from "./../utils/time";
 
 export default class Status extends BaseCommand {
-  static description = "Get the status of a deployment";
+  static description =
+    "Get the status of a deployment and its container resources";
 
   static args = [
     {
