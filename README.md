@@ -8,7 +8,7 @@ A command-line tool for working with [Krane](https://krane.sh).
 
 ## Install
 
-You can install the Krane CLI using [npm](https://www.npmjs.com/). The following command will install the cli globally allowing you to run `krane` commands from anywhere on your machine.
+You can install the Krane CLI using [npm](https://www.npmjs.com/package/krane). The following command will install the cli globally allowing you to run `krane` commands from anywhere on your machine.
 
 ```
 npm i -g krane
