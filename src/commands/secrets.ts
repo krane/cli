@@ -2,6 +2,7 @@ import { cli } from "cli-ux";
 import { flags } from "@oclif/command";
 
 import BaseCommand from "../base";
+import { Secret } from "@krane/common";
 
 export default class Secrets extends BaseCommand {
   static description = `Add, delete, or list deployment secrets
@@ -87,21 +88,24 @@ export default class Secrets extends BaseCommand {
   }
 
   async list(deploymentName: string) {
+    const client = await this.getKraneClient();
+
+    let secrets: Secret[];
     try {
-      const client = await this.getKraneClient();
-      const secrets = await client.getSecrets(deploymentName);
-      cli.table(secrets, {
-        key: {
-          get: (secret) => secret.key,
-          minWidth: 10,
-        },
-        alias: {
-          get: (secret) => secret.alias,
-          minWidth: 10,
-        },
-      });
+      secrets = await client.getSecrets(deploymentName);
     } catch (e) {
       this.error(e?.response?.data ?? "Unable to list secrets");
     }
+
+    cli.table(secrets, {
+      key: {
+        get: (secret) => secret.key,
+        minWidth: 10,
+      },
+      alias: {
+        get: (secret) => secret.alias,
+        minWidth: 10,
+      },
+    });
   }
 }
