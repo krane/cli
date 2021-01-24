@@ -51,10 +51,14 @@ export default class List extends BaseCommand {
           get: (deployment) => deployment.config.name,
           minWidth: 10,
         },
-        up: {
-          get: (deployment) =>
-            `${deployment.containers.length}/${deployment.config.scale}`,
-          minWidth: 6,
+        ready: {
+          get: (deployment) => {
+            const runningContainers = deployment.containers.filter(
+              (container) => container.state.running
+            );
+            return `${runningContainers.length}/${deployment.config.scale}`;
+          },
+          minWidth: 8,
         },
         updated: {
           get: (deployment) => {
