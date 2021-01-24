@@ -1,7 +1,7 @@
 import BaseCommand from "../base";
 
 export default class Stop extends BaseCommand {
-  static description = "Stop all container for a deployment";
+  static description = "Stop all containers for a deployment";
 
   static args = [
     {
