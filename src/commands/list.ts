@@ -21,19 +21,17 @@ export default class List extends BaseCommand {
   async run() {
     const { flags } = this.parse(List);
 
+    const client = await this.getKraneClient();
+
     let deployments;
     try {
-      const client = await this.getKraneClient();
       deployments = await client.getDeployments();
     } catch (e) {
       this.error(e?.response?.data ?? "Unable list deployment");
     }
 
-    const nonInternalDeployments = deployments.filter(
-      (d) => !d.config.internal
-    );
-
-    if (nonInternalDeployments.length == 0) {
+    const userDeployment = deployments.filter((d) => !d.config.internal);
+    if (!flags.internal && userDeployment.length == 0) {
       this.log(`\n  You don't have any active deployments`);
       this.log(
         `\n  Get started by running the command below or checking out https://krane.sh/#/docs/deployment`
