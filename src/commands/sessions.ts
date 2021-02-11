@@ -105,17 +105,15 @@ export default class Sessions extends BaseCommand {
       this.error(e?.response?.data ?? "Unable to list sessions");
     }
 
-    cli.table(
-      sessions.filter((s) => user == s.user),
-      {
-        expires: {
-          get: (session) => session.expires_at,
-        },
-        token: {
-          get: (session) => session.token,
-        },
-      }
-    );
+    const userSessions = sessions.filter((s) => user == s.user);
+
+    userSessions.map((session) => {
+      this.log("");
+      this.log(`User: ${session.user}`);
+      this.log(`Expires: ${session.expires_at}`);
+      this.log(`Token: ${session.token}`);
+      this.log("");
+    });
   }
 
   async list() {
@@ -128,9 +126,18 @@ export default class Sessions extends BaseCommand {
       this.error(e?.response?.data ?? "Unable to list sessions");
     }
 
-    cli.table(sessions, {
+    const aphabeticSort = (sessions: Session[]) =>
+      sessions.sort((a, b) => (a.user < b.user ? -1 : 1));
+
+    cli.table(aphabeticSort(sessions), {
       user: {
         get: (session) => session.user,
+        minWidth: 10,
+      },
+      active: {
+        get: (session) =>
+          new Date(0).setHours(0, 0, 0, 0) <=
+          new Date(session.expires_at).setHours(0, 0, 0, 0),
         minWidth: 10,
       },
       expires: {
