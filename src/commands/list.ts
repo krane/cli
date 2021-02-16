@@ -94,7 +94,7 @@ export default class List extends BaseCommand {
     );
 
     const firstErrorDeployment = deployments
-      .filter((dep) => getLastJob(dep).status.failure_count > 0)
+      .filter((dep) => getLastJob(dep)?.status.failure_count > 0)
       .sort(
         (depA, depB) =>
           getLastJob(depA).start_time_epoch - getLastJob(depB).start_time_epoch
