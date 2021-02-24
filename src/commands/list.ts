@@ -27,7 +27,7 @@ export default class List extends BaseCommand {
     try {
       deployments = await client.getDeployments();
     } catch (e) {
-      this.error(e?.response?.data ?? "Unable list deployment");
+      this.error(e?.response?.data ?? "Unable list deployments");
     }
 
     const userDeployment = deployments.filter((d) => !d.config.internal);
