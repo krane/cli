@@ -1,31 +1,46 @@
+import { flags } from "@oclif/command";
+
 import BaseCommand from "../base";
 
 export default class Logs extends BaseCommand {
-  static description = "Stream container logs";
+  static description = "Read deployment or container logs";
 
-  static usage = "logs <container-name>";
+  static usage = "logs <deployment>";
 
-  static examples = ["$ krane logs", "$ krane logs <container-name>"];
+  static examples = [
+    "$ krane logs my-app",
+    "$ krane logs my-app --container=my-app-haYADWqwmzY83QuZQfQY3h",
+  ];
 
   static args = [
     {
-      name: "container",
+      name: "deployment",
       required: true,
-      default: "krane",
-      description: "Name of the container",
+      description: "Name of the deployment",
     },
   ];
 
+  static flags = {
+    container: flags.string({ char: "c" }), // --container or -c
+  };
+
   async run() {
-    const { args } = this.parse(Logs);
+    const { args, flags } = this.parse(Logs);
 
     const client = await this.getKraneClient();
 
+    let socket: WebSocket;
+
     try {
-      const socket = client.readContainerLogs(args.container);
-      socket.onmessage = (e: MessageEvent) => this.log(e.data);
+      if (flags.container) {
+        socket = client.subscribeToContainerLogs(flags.container);
+      } else {
+        socket = client.subscribeToDeploymentLogs(args.deployment);
+      }
     } catch (e) {
-      this.error(e?.response?.data ?? "Unable to read container logs");
+      this.error(e?.response?.data ?? "Unable to read deployment logs");
     }
+
+    socket.onmessage = (e: MessageEvent) => this.log(e.data);
   }
 }
