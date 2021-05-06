@@ -10,35 +10,21 @@ import BaseCommand from "../base";
 const readFile = util.promisify(fs.readFile);
 
 export default class Deploy extends BaseCommand {
-  static description = `Create or run a deployment
+  static description = `Create or re-run a deployment
   Check out https://www.krane.sh/#/docs/deployment for additional documentation`;
 
   static usage = "deploy -f /path/to/deployment.json";
 
-  static examples = [
-    "$ krane deploy -f /path/to/json",
-    "$ krane deploy -f /path/to/json --tag latest-2",
-    "$ krane deploy -f /path/to/json --tag latest-2 --scale 3",
-  ];
+  static examples = ["$ krane deploy -f /path/to/json"];
 
   static flags = {
     file: flags.string({ char: "f" }), // --file or -f
-    tag: flags.string({ char: "t" }), // --tag or -t
-    scale: flags.string({ char: "s" }), // --scale or -s
   };
 
   async run() {
     const { flags } = this.parse(Deploy);
 
     const config = await this.loadDeploymentConfig(flags.file);
-
-    if (flags.tag) {
-      config.tag = flags.tag;
-    }
-
-    if (flags.scale) {
-      config.scale = parseInt(flags.scale);
-    }
 
     if (config.scale == null) {
       config.scale = 1;

@@ -25,6 +25,10 @@ export class AuthState {
     };
   }
 
+  setToken(token: string) {
+    this.token = token;
+  }
+
   setTokenInfo(token: string, tokenExpiry: Date, user: string) {
     this.token = token;
     this.tokenExpiry = tokenExpiry;
