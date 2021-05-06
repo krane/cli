@@ -2,7 +2,7 @@ import { flags } from "@oclif/command";
 import BaseCommand from "../base";
 
 export default class Context extends BaseCommand {
-  static description = `View or update the context for the Krane instance in use.
+  static description = `View or update the context for the Krane instance in use
   This context contains the endpoint and authentication token used by the CLI to request data from Krane.`;
 
   static aliases = ["ctx"];
