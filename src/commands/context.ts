@@ -36,11 +36,12 @@ export default class Context extends BaseCommand {
     const { flags } = this.parse(Context);
 
     if (!flags.endpoint && !flags.token) {
-      this.log(`User: ${this.ctx.authState.getTokenInfo().user}`);
-      this.log(`Endpoint: ${this.ctx.serverEndpoint}`);
+      this.log(`Endpoint: ${this.ctx.serverEndpoint ?? ""}`);
       this.log(
         `Token: ${
-          flags.unseal ? this.ctx.authState.getTokenInfo().token : "[hidden]"
+          flags.unseal
+            ? this.ctx.authState.getTokenInfo().token ?? ""
+            : "[hidden]"
         }`
       );
       return;

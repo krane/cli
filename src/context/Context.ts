@@ -81,9 +81,15 @@ export class AppContext {
 
     const { token, tokenExpiry, user } = this.authState.getTokenInfo();
 
-    if (token && tokenExpiry && user) {
+    if (token) {
       ctx.token = token;
+    }
+
+    if (tokenExpiry) {
       ctx.tokenExpiry = tokenExpiry;
+    }
+
+    if (user) {
       ctx.user = user;
     }
 
