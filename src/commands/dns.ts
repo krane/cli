@@ -74,10 +74,7 @@ To configure deployment aliases visit: https://www.krane.sh/#/docs/deployment?id
       alias: {
         get: (deployment) => {
           return deployment.config.alias
-            ?.map(
-              (alias) =>
-                `${alias} (${aliasesToIpMap[alias] || "DNS unreachable"})`
-            )
+            ?.map((alias) => `${alias} (${aliasesToIpMap[alias]})`)
             .join(`\n`);
         },
       },
@@ -89,7 +86,7 @@ To configure deployment aliases visit: https://www.krane.sh/#/docs/deployment?id
       const ip = await lookup(alias);
       return ip.address;
     } catch {
-      return "";
+      return "DNS unreachable";
     }
   }
 }
