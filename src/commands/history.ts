@@ -15,13 +15,13 @@ export default class History extends BaseCommand {
   static args = [
     {
       name: "deployment",
-      required: true,
       description: "Name of the deployment",
+      required: true,
     },
     {
       name: "job",
-      required: false,
       description: "Deployment job id",
+      required: false,
     },
   ];
 

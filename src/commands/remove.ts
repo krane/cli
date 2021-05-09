@@ -8,8 +8,8 @@ export default class Remove extends BaseCommand {
   static args = [
     {
       name: "deployment",
-      required: true,
       description: "Name of the deployment",
+      required: true,
     },
   ];
 

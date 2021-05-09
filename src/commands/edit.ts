@@ -24,8 +24,8 @@ export default class Edit extends BaseCommand {
   static args = [
     {
       name: "deployment",
-      required: true,
       description: "Name of the deployment",
+      required: true,
     },
   ];
 

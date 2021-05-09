@@ -65,23 +65,21 @@ export default class List extends BaseCommand {
               latestJob?.status.failure_count > 0
                 ? "with errors"
                 : "succesfully"
-            } ${calculateTimeDiff(latestJob?.start_time_epoch)}`;
+            } ${calculateTimeDiff(latestJob?.start_time_epoch) ?? "0"}`;
           },
           minWidth: 30,
-        },
-        secure: {
-          get: (deployment) => deployment.config.secure,
-          minWidth: 10,
         },
         tag: {
           get: (deployment) => deployment.config.tag,
           minWidth: 10,
         },
-        image: {
-          get: (deployment) => deployment.config.image,
-          minWidth: 20,
+        secure: {
+          get: (deployment) => deployment.config.secure,
+          minWidth: 10,
         },
-
+        Alias: {
+          get: (deployment) => deployment.config.alias?.join("\n"),
+        },
         internal: {
           get: (deployment) => deployment.config.internal,
           extended: true,

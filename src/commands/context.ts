@@ -26,7 +26,7 @@ export default class Context extends BaseCommand {
     unseal: flags.boolean({
       char: "u",
       description:
-        "Reveal sensitive information about the current Krane context such as tokens.",
+        "Reveal sensitive information about the current Krane context such as tokens",
       default: false,
     }),
   };

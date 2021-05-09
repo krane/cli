@@ -17,14 +17,14 @@ export default class Sessions extends BaseCommand {
   static args = [
     {
       name: "subcommand",
-      required: true,
-      options: ["ls", "list", "create", "rm", "remove"],
       description: "[list, create, remove]",
+      options: ["ls", "list", "create", "rm", "remove"],
+      required: true,
     },
     {
       name: "user",
-      required: false,
       description: "name of the session user ",
+      required: false,
     },
   ];
 

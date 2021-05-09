@@ -11,13 +11,13 @@ export default class Status extends BaseCommand {
   static args = [
     {
       name: "deployment",
-      required: true,
       description: "Name of the deployment",
+      required: true,
     },
     {
       name: "container",
-      required: false,
       description: "Name of the container",
+      required: false,
     },
   ];
 
@@ -59,6 +59,10 @@ export default class Status extends BaseCommand {
       },
       container: {
         get: (container) => container.name,
+        minWidth: 20,
+      },
+      image: {
+        get: (container) => container.image,
         minWidth: 20,
       },
     });

@@ -32,13 +32,13 @@ export default class Secrets extends BaseCommand {
   static args = [
     {
       name: "subcommand",
-      required: true,
       options: ["add", "delete", "list", "ls"],
+      required: true,
     },
     {
       name: "deployment",
-      required: true,
       description: "Deployment name",
+      required: true,
     },
   ];
 

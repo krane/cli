@@ -6,8 +6,8 @@ export default class Stop extends BaseCommand {
   static args = [
     {
       name: "deployment",
-      required: true,
       description: "Name of the deployment",
+      required: true,
     },
   ];
 
