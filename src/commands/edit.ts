@@ -5,6 +5,7 @@ import { promisify } from "util";
 import { isEqual } from "lodash";
 import { spawn, SpawnOptions } from "child_process";
 
+import { flags } from "@oclif/command";
 import { Config, Deployment } from "@krane/common";
 
 import BaseCommand from "../base";
@@ -29,8 +30,16 @@ export default class Edit extends BaseCommand {
     },
   ];
 
+  static flags = {
+    output: flags.string({
+      char: "o",
+      description:
+        "Filepath where the updated deployment configuration will be saved to",
+    }),
+  };
+
   async run() {
-    const { args } = this.parse(Edit);
+    const { args, flags } = this.parse(Edit);
 
     const client = await this.getKraneClient();
 
@@ -50,6 +59,7 @@ export default class Edit extends BaseCommand {
     proc.on("exit", async () => {
       const rawConfig = await readFile(filepath, "utf8");
       const parsedConfig = JSON.parse(rawConfig) as Config;
+      await removeFile(filepath);
 
       if (isEqual(parsedConfig, deployment.config)) {
         this.log("Deployment configuration unchanged. Nothing to do.");
@@ -62,17 +72,24 @@ export default class Edit extends BaseCommand {
 
       await client.saveDeployment(parsedConfig);
       await client.runDeployment(parsedConfig.name);
-      await removeFile(filepath);
+
+      if (flags.output) {
+        await this.save(parsedConfig, flags.output);
+        this.log(`Updated deployment configuration save to ${flags.output}`);
+      }
     });
   }
 
-  async save(config: Config): Promise<string> {
-    const serialized = JSON.stringify(config, null, 2);
-    const filepath = path.resolve(
-      this.dotConfigDir,
-      `${config.name}.deployment.json`
-    );
+  async save(config: Config, filepath?: string): Promise<string> {
+    // default to ~/.krane dir. if no output filepath was specified,
+    if (!filepath) {
+      filepath = path.resolve(
+        this.dotConfigDir,
+        `${config.name}.deployment.json`
+      );
+    }
 
+    const serialized = JSON.stringify(config, null, 2);
     await writeFile(filepath, serialized, "utf8");
     return filepath;
   }
