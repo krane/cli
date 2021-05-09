@@ -3,7 +3,7 @@ import BaseCommand from "../base";
 
 export default class Context extends BaseCommand {
   static description = `View or update the context for the Krane instance in use
-  This context contains the endpoint and authentication token used by the CLI to request data from Krane.`;
+  This context contains the endpoint and authentication token used by the CLI to request data from Krane`;
 
   static aliases = ["ctx"];
 
@@ -15,12 +15,12 @@ export default class Context extends BaseCommand {
   static flags = {
     endpoint: flags.string({
       char: "e",
-      description: "Krane endpoint (ex: https://example.com)",
+      description: "Set the Krane endpoint (ex: https://example.com)",
       required: false,
     }),
     token: flags.string({
       char: "t",
-      description: "Krane token used for authentication",
+      description: "Set the Krane token used for authentication",
       required: false,
     }),
     unseal: flags.boolean({
