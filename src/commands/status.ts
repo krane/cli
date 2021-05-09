@@ -55,14 +55,14 @@ export default class Status extends BaseCommand {
       },
       updated: {
         get: (container) => `${calculateTimeDiff(container.created_at)}`,
-        minWidth: 18,
-      },
-      container: {
-        get: (container) => container.name,
-        minWidth: 20,
+        minWidth: 17,
       },
       image: {
         get: (container) => container.image,
+        minWidth: 15,
+      },
+      container: {
+        get: (container) => container.name,
         minWidth: 20,
       },
     });

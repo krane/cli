@@ -75,9 +75,9 @@ export default class List extends BaseCommand {
         },
         secure: {
           get: (deployment) => deployment.config.secure,
-          minWidth: 10,
+          minWidth: 9,
         },
-        Alias: {
+        alias: {
           get: (deployment) => deployment.config.alias?.join("\n"),
         },
         internal: {
