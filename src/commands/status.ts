@@ -48,24 +48,37 @@ export default class Status extends BaseCommand {
   }
 
   logTable(containers: Container[]) {
-    cli.table(containers, {
-      status: {
-        get: (container) => container.state.status,
-        minWidth: 10,
+    cli.table(
+      containers,
+      {
+        status: {
+          get: (container) => container.state.status,
+          minWidth: 10,
+        },
+        updated: {
+          get: (container) => `${calculateTimeDiff(container.created_at)}`,
+          minWidth: 17,
+        },
+        image: {
+          get: (container) => container.image,
+          minWidth: 15,
+        },
+        container: {
+          get: (container) => container.name,
+          minWidth: 20,
+        },
+        ports: {
+          get: (container) =>
+            container.ports
+              .map((port) => `${port.host_port} → ${port.container_port}`)
+              .join("\n"),
+          minWidth: 10,
+        },
       },
-      updated: {
-        get: (container) => `${calculateTimeDiff(container.created_at)}`,
-        minWidth: 17,
-      },
-      image: {
-        get: (container) => container.image,
-        minWidth: 15,
-      },
-      container: {
-        get: (container) => container.name,
-        minWidth: 20,
-      },
-    });
+      {
+        "no-truncate": true,
+      }
+    );
   }
 
   logContainerTable(container: Container) {

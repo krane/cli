@@ -2,6 +2,7 @@ import cli from "cli-ux";
 
 import BaseCommand from "../base";
 import { Session } from "@krane/common";
+import { flags } from "@oclif/command";
 
 export default class Sessions extends BaseCommand {
   static description = "Create, list or remove user sessions";
@@ -28,8 +29,17 @@ export default class Sessions extends BaseCommand {
     },
   ];
 
+  static flags = {
+    unseal: flags.boolean({
+      char: "u",
+      description:
+        "Reveal sensitive information about the current Krane context such as tokens",
+      default: false,
+    }),
+  };
+
   async run() {
-    const { args } = this.parse(Sessions);
+    const { args, flags } = this.parse(Sessions);
 
     switch (args.subcommand) {
       case "create":
@@ -53,11 +63,7 @@ export default class Sessions extends BaseCommand {
         break;
       case "ls":
       case "list":
-        if (args.user) {
-          await this.listOne(args.user);
-          return;
-        }
-        await this.list();
+        await this.list(args.user, flags.unseal);
         break;
       default:
         this.error(`Unknown command ${args.subcommand}`);
@@ -95,28 +101,7 @@ export default class Sessions extends BaseCommand {
     }
   }
 
-  async listOne(user: string) {
-    const client = await this.getKraneClient();
-
-    let sessions: Session[];
-    try {
-      sessions = await client.getSessions();
-    } catch (e) {
-      this.error(e?.response?.data ?? "Unable to list sessions");
-    }
-
-    const userSessions = sessions.filter((s) => user == s.user);
-
-    userSessions.map((session) => {
-      this.log("");
-      this.log(`User: ${session.user}`);
-      this.log(`Expires: ${session.expires_at}`);
-      this.log(`Token: ${session.token}`);
-      this.log("");
-    });
-  }
-
-  async list() {
+  async list(user?: string, unseal: boolean = false) {
     const client = await this.getKraneClient();
 
     let sessions: Session[];
@@ -129,21 +114,36 @@ export default class Sessions extends BaseCommand {
     const aphabeticSort = (sessions: Session[]) =>
       sessions.sort((a, b) => (a.user < b.user ? -1 : 1));
 
-    cli.table(aphabeticSort(sessions), {
-      user: {
-        get: (session) => session.user,
-        minWidth: 10,
+    let filteredSessions = sessions;
+    if (user) {
+      filteredSessions = sessions.filter((s) => s.user == user);
+    }
+
+    cli.table(
+      aphabeticSort(filteredSessions),
+      {
+        user: {
+          get: (session) => session.user,
+          minWidth: 10,
+        },
+        active: {
+          get: (session) =>
+            new Date(0).setHours(0, 0, 0, 0) <=
+            new Date(session.expires_at).setHours(0, 0, 0, 0),
+          minWidth: 10,
+        },
+        expires: {
+          get: (session) => session.expires_at,
+          minWidth: 15,
+        },
+        token: {
+          get: (session) =>
+            unseal ? session.token.replace(/.{100}/g, "$&\n") : "[hidden]",
+        },
       },
-      active: {
-        get: (session) =>
-          new Date(0).setHours(0, 0, 0, 0) <=
-          new Date(session.expires_at).setHours(0, 0, 0, 0),
-        minWidth: 10,
-      },
-      expires: {
-        get: (session) => session.expires_at,
-        minWidth: 15,
-      },
-    });
+      {
+        "no-truncate": true,
+      }
+    );
   }
 }
