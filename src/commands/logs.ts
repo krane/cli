@@ -42,5 +42,14 @@ export default class Logs extends BaseCommand {
     }
 
     socket.onmessage = (e: MessageEvent) => this.log(e.data);
+    socket.onerror = (e: Event) => {
+      if (e.type === "error") {
+        this.log(
+          `\n\n=================================\n
+          Error reading container logs:\n${e?.message}
+          \n=================================\n\n`
+        );
+      }
+    };
   }
 }
