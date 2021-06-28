@@ -1,11 +1,13 @@
 import * as fs from "fs";
 import * as path from "path";
 import * as util from "util";
+import cli from "cli-ux";
 
 import { flags } from "@oclif/command";
 import { Config } from "@krane/common";
 
 import BaseCommand from "../base";
+import { isArguments } from "lodash";
 
 const readFile = util.promisify(fs.readFile);
 
@@ -25,12 +27,22 @@ export default class Deploy extends BaseCommand {
     const { flags } = this.parse(Deploy);
 
     const config = await this.loadDeploymentConfig(flags.file);
-
-    if (config.scale == null) {
-      config.scale = 1;
-    }
-
     const client = await this.getKraneClient();
+
+    const deploymentEvents = client.subscribeToDeploymentEvents(config.name);
+    deploymentEvents.onmessage = (event: MessageEvent) => {
+      const { message } = JSON.parse(event.data) as {
+        job_id: string;
+        message: string;
+      };
+
+      if (message.startsWith("{")) {
+        return;
+      }
+
+      cli.action.stop();
+      cli.action.start(message);
+    };
 
     try {
       await client.saveDeployment(config);
@@ -47,6 +59,12 @@ export default class Deploy extends BaseCommand {
     }
 
     const contents = await readFile(pathToConfig);
-    return JSON.parse(contents.toString()) as Config;
+    const config = JSON.parse(contents.toString()) as Config;
+
+    if (config.scale == null) {
+      config.scale = 1;
+    }
+
+    return config;
   }
 }
