@@ -89,7 +89,7 @@ export default class Deploy extends BaseCommand {
 
       switch (type) {
         case "ERROR": {
-          this.log(`\n❌ Failed to deploy \`${config.name}\`:\n${message}\n`);
+          this.log(`\n✕ Failed to deploy \`${config.name}\`:\n${message}\n`);
           socket.close(1000);
           break;
         }
