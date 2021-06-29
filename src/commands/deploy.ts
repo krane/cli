@@ -4,12 +4,26 @@ import * as util from "util";
 import cli from "cli-ux";
 
 import { flags } from "@oclif/command";
-import { Config } from "@krane/common";
+import { Config, KraneClient } from "@krane/common";
 
 import BaseCommand from "../base";
-import { isArguments } from "lodash";
 
 const readFile = util.promisify(fs.readFile);
+
+type DeploymentEvent = {
+  job_id: string;
+  deployment: string;
+  type:
+    | "DEPLOYMENT_SETUP"
+    | "DEPLOYMENT_HEALTHCHECK"
+    | "DEPLOYMENT_CLEANUP"
+    | "DEPLOYMENT_DONE"
+    | "PULL_IMAGE"
+    | "CREATE_CONTAINER"
+    | "START_CONTAINER"
+    | "ERROR";
+  message: string;
+};
 
 export default class Deploy extends BaseCommand {
   static description = `Create or re-run a deployment
@@ -29,26 +43,12 @@ export default class Deploy extends BaseCommand {
     const config = await this.loadDeploymentConfig(flags.file);
     const client = await this.getKraneClient();
 
-    const deploymentEvents = client.subscribeToDeploymentEvents(config.name);
-    deploymentEvents.onmessage = (event: MessageEvent) => {
-      const { message } = JSON.parse(event.data) as {
-        job_id: string;
-        message: string;
-      };
-
-      if (message.startsWith("{")) {
-        return;
-      }
-
-      cli.action.stop();
-      cli.action.start(message);
-    };
-
     try {
+      this.subscribeToDeploymentEvents(config, client);
       await client.saveDeployment(config);
       await client.runDeployment(config.name);
     } catch (e) {
-      this.error(e?.response?.data ?? "Unable run deployment");
+      this.error(e?.response?.data ?? "Error running deployment");
     }
   }
 
@@ -66,5 +66,67 @@ export default class Deploy extends BaseCommand {
     }
 
     return config;
+  }
+
+  private async subscribeToDeploymentEvents(
+    config: Config,
+    client: KraneClient
+  ): Promise<void> {
+    const socket = client.subscribeToDeploymentEvents(config.name);
+
+    socket.onerror = (_event: Event) => {
+      if (cli.action.running) cli.action.stop();
+      this.log(
+        `Encountered an unexpected error when deploying \`${config.name}\``
+      );
+      socket.close(1000);
+    };
+
+    socket.onmessage = (event: MessageEvent) => {
+      const { message, type } = JSON.parse(event.data) as DeploymentEvent;
+
+      if (cli.action.running) cli.action.stop();
+
+      switch (type) {
+        case "ERROR": {
+          this.log(`\n❌ Failed to deploy \`${config.name}\`:\n${message}\n`);
+          socket.close(1000);
+          break;
+        }
+        case "DEPLOYMENT_DONE": {
+          cli.action.start(`→ ${message}`);
+          cli.action.stop();
+
+          const deployedAliases = config.alias?.join("\n🔗 ") ?? [
+            "Visit https://krane.sh to learn how to configure a deployment alias",
+          ];
+
+          this.log(`
+✅ \`${config.name}\` was succesfully deployed to:
+🔗 ${deployedAliases}
+
+To view the status of \`${config.name}\` run:
+$ krane status ${config.name}`);
+
+          socket.close(1000);
+          break;
+        }
+        case "PULL_IMAGE": {
+          // We omit the pull image events that
+          // are objects because those  are Docker
+          // specific and are VERY noisy.
+          if (message.startsWith("{")) {
+            break;
+          }
+
+          cli.action.start(`→ ${message}`);
+          break;
+        }
+        default: {
+          cli.action.start(`→ ${message}`);
+          break;
+        }
+      }
+    };
   }
 }
