@@ -1,6 +1,7 @@
 import * as fs from "fs";
 import * as path from "path";
 import * as util from "util";
+import fetch from "node-fetch";
 
 import { flags } from "@oclif/command";
 import { Config } from "@krane/common";
@@ -19,12 +20,37 @@ export default class Deploy extends BaseCommand {
 
   static flags = {
     file: flags.string({ char: "f" }), // --file or -f
+    url: flags.string({ char: "u" }), // --url or -u
   };
 
   async run() {
     const { flags } = this.parse(Deploy);
 
-    const config = await this.loadDeploymentConfig(flags.file);
+    if (flags.file && flags.url) {
+      this.error("File and URL flags both provided, please provide only one.");
+    }
+
+    let config: Config;
+
+    if (flags.url) {
+      config = await fetch(flags.url)
+        .then(async (res) => await res.json())
+        .catch((e) =>
+          this.error(`fetching deployment config from ${flags.url}: ${e}`)
+        );
+    } else if (flags.file) {
+      config = await this.loadDeploymentConfig(flags.file);
+    } else {
+      const appPath = path.resolve(".");
+      const pathToConfig = path.resolve(appPath, "deployment.json");
+      this.log(`
+A deployment configuration file or URL was not provided, resolving: ${pathToConfig}
+\nPlease note: If you would like to point to a custom file or URL where your 
+deployment configuration is located try the --file or --url CLI flags.
+
+$ krane deploy --file ./deployment.json\n`);
+      config = await this.loadDeploymentConfig(pathToConfig);
+    }
 
     if (config.scale == null) {
       config.scale = 1;
@@ -40,12 +66,7 @@ export default class Deploy extends BaseCommand {
     }
   }
 
-  private async loadDeploymentConfig(pathToConfig?: string): Promise<Config> {
-    if (!pathToConfig) {
-      const appPath = path.resolve(".");
-      pathToConfig = path.resolve(appPath, "deployment.json");
-    }
-
+  private async loadDeploymentConfig(pathToConfig: string): Promise<Config> {
     const contents = await readFile(pathToConfig);
     return JSON.parse(contents.toString()) as Config;
   }
