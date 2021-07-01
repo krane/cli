@@ -4,26 +4,11 @@ import * as util from "util";
 import cli from "cli-ux";
 
 import { flags } from "@oclif/command";
-import { Config, KraneClient } from "@krane/common";
+import { Config, DeploymentEvent, KraneClient } from "@krane/common";
 
 import BaseCommand from "../base";
 
 const readFile = util.promisify(fs.readFile);
-
-type DeploymentEvent = {
-  job_id: string;
-  deployment: string;
-  type:
-    | "DEPLOYMENT_SETUP"
-    | "DEPLOYMENT_HEALTHCHECK"
-    | "DEPLOYMENT_CLEANUP"
-    | "DEPLOYMENT_DONE"
-    | "PULL_IMAGE"
-    | "CREATE_CONTAINER"
-    | "START_CONTAINER"
-    | "ERROR";
-  message: string;
-};
 
 export default class Deploy extends BaseCommand {
   static description = `Create or re-run a deployment
@@ -72,61 +57,67 @@ export default class Deploy extends BaseCommand {
     config: Config,
     client: KraneClient
   ): Promise<void> {
-    const socket = client.subscribeToDeploymentEvents(config.name);
+    client.subscribeToDeploymentEvents(config.name, {
+      DEPLOYMENT_SETUP: (event: DeploymentEvent) => {
+        cli.action.stop();
+        cli.action.start(`→ ${event.message}`);
+      },
 
-    socket.onerror = (_event: Event) => {
-      if (cli.action.running) cli.action.stop();
-      this.log(
-        `Encountered an unexpected error when deploying \`${config.name}\``
-      );
-      socket.close(1000);
-    };
-
-    socket.onmessage = (event: MessageEvent) => {
-      const { message, type } = JSON.parse(event.data) as DeploymentEvent;
-
-      if (cli.action.running) cli.action.stop();
-
-      switch (type) {
-        case "ERROR": {
-          this.log(`\n✕ Failed to deploy \`${config.name}\`:\n${message}\n`);
-          socket.close(1000);
-          break;
+      DEPLOYMENT_PULL_IMAGE: (event: DeploymentEvent) => {
+        // Skip displaying docker pull image
+        // metadata events since they are VERY noisy.
+        if (event.message.startsWith("{")) {
+          return;
         }
-        case "DEPLOYMENT_DONE": {
-          cli.action.start(`→ ${message}`);
-          cli.action.stop();
 
-          const deployedAliases = config.alias?.join("\n🔗 ") ?? [
-            "Visit https://krane.sh to learn how to configure a deployment alias",
-          ];
+        cli.action.stop();
+        cli.action.start(`→ ${event.message}`);
+      },
 
-          this.log(`
-✅ \`${config.name}\` was succesfully deployed to:
-🔗 ${deployedAliases}
+      DEPLOYMENT_CONTAINER_CREATE: (event: DeploymentEvent) => {
+        cli.action.stop();
+        cli.action.start(`→ ${event.message}`);
+      },
 
-To view the status of \`${config.name}\` run:
-$ krane status ${config.name}`);
+      DEPLOYMENT_CONTAINER_START: (event: DeploymentEvent) => {
+        cli.action.stop();
+        cli.action.start(`→ ${event.message}`);
+      },
 
-          socket.close(1000);
-          break;
-        }
-        case "PULL_IMAGE": {
-          // We omit the pull image events that
-          // are objects because those  are Docker
-          // specific and are VERY noisy.
-          if (message.startsWith("{")) {
-            break;
-          }
+      DEPLOYMENT_HEALTHCHECK: (event: DeploymentEvent) => {
+        cli.action.stop();
+        cli.action.start(`→ ${event.message}`);
+      },
 
-          cli.action.start(`→ ${message}`);
-          break;
-        }
-        default: {
-          cli.action.start(`→ ${message}`);
-          break;
-        }
-      }
-    };
+      DEPLOYMENT_CLEANUP: (event: DeploymentEvent) => {
+        cli.action.stop();
+        cli.action.start(`→ ${event.message}`);
+      },
+
+      DEPLOYMENT_DONE: (event: DeploymentEvent, stopListening) => {
+        cli.action.stop();
+        cli.action.start(`→ ${event.message}`);
+        cli.action.stop();
+
+        const deploymentURLs = config.alias
+          ?.map((url) => (config.secure ? `https://${url}` : `http://${url}`))
+          .join("\n🔗 ") ?? [
+          "Visit https://krane.sh to learn how to configure a deployment alias",
+        ];
+        this.log(
+          `\n✅ \`${config.name}\` was succesfully deployed to:\n🔗 ${deploymentURLs}
+            \nTo view the status of \`${config.name}\` run:\n$ krane status ${config.name}`
+        );
+        stopListening();
+      },
+
+      DEPLOYMENT_ERROR: (event: DeploymentEvent, stopListening) => {
+        cli.action.stop();
+        this.log(
+          `\n✕ Failed to deploy \`${config.name}\`:\n${event.message}\n`
+        );
+        stopListening();
+      },
+    });
   }
 }
