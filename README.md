@@ -39,7 +39,7 @@ $ krane status
 $ krane logs <deployment>
 ```
 
-Checkout the [official docs site](https://www.krane.sh/#/docs/cli) for the complete list of avaiable commands.
+Checkout the [official docs site](https://www.krane.sh/#/docs/cli) for the complete list of available commands.
 
 ## Contributing
 
