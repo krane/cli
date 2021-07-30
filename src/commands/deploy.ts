@@ -1,15 +1,12 @@
+import { Config, DeploymentEvent, KraneClient } from "@krane/common";
+import { flags } from "@oclif/command";
+import cli from "cli-ux";
 import * as fs from "fs";
 import * as path from "path";
 import * as util from "util";
-import cli from "cli-ux";
-
-import { flags } from "@oclif/command";
-import { Config, DeploymentEvent, KraneClient } from "@krane/common";
-
 import BaseCommand from "../base";
 
 const readFile = util.promisify(fs.readFile);
-
 export default class Deploy extends BaseCommand {
   static description = `Create or re-run a deployment
   Check out https://www.krane.sh/#/docs/deployment for additional documentation`;
@@ -65,7 +62,7 @@ export default class Deploy extends BaseCommand {
           cli.action.start(`→ ${event.message}`);
         },
 
-        DEPLOYMENT_PULL_IMAGE: (event: DeploymentEvent) => {
+        PULL_IMAGE: (event: DeploymentEvent) => {
           // Skip displaying docker pull image
           // metadata events since they are VERY noisy.
           if (event.message.startsWith("{")) {
@@ -76,12 +73,12 @@ export default class Deploy extends BaseCommand {
           cli.action.start(`→ ${event.message}`);
         },
 
-        DEPLOYMENT_CONTAINER_CREATE: (event: DeploymentEvent) => {
+        CONTAINER_CREATE: (event: DeploymentEvent) => {
           cli.action.stop();
           cli.action.start(`→ ${event.message}`);
         },
 
-        DEPLOYMENT_CONTAINER_START: (event: DeploymentEvent) => {
+        CONTAINER_START: (event: DeploymentEvent) => {
           cli.action.stop();
           cli.action.start(`→ ${event.message}`);
         },
