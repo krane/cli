@@ -1,4 +1,4 @@
-name: publish-binary
+name: Publish Binary
 
 on:
   push:
