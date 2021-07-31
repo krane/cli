@@ -1,4 +1,4 @@
-<img src="https://github.com/krane/krane/blob/master/docs/assets/krane-wordmark.png?raw=true" width="350">
+<img src="https://github.com/krane/krane/blob/main/docs/assets/krane-wordmark.png?raw=true" width="350">
 
 > A command-line tool for managing insfrastructure running on [Krane](https://github.com/krane/krane).
 
