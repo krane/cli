@@ -33,7 +33,7 @@ $ krane login http://example.com:8500
 $ krane list 
 
 # Returns information about the containers for a deployment.
-$ krane status 
+$ krane status <deployment>
 
 # Read realtime logs for a deployment.
 $ krane logs <deployment>
