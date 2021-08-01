@@ -1,13 +1,10 @@
-import * as path from "path";
-import * as fs from "fs";
-
-import { promisify } from "util";
-import { isEqual } from "lodash";
-import { spawn, SpawnOptions } from "child_process";
-
-import { flags } from "@oclif/command";
 import { Config, Deployment } from "@krane/common";
-
+import { flags } from "@oclif/command";
+import { spawn, SpawnOptions } from "child_process";
+import * as fs from "fs";
+import { isEqual } from "lodash";
+import * as path from "path";
+import { promisify } from "util";
 import BaseCommand from "../base";
 
 const readFile = promisify(fs.readFile);
@@ -67,7 +64,7 @@ export default class Edit extends BaseCommand {
       }
 
       this.log(
-        "Deployment configuration updated. Triggering new deployment run."
+        "→ Deployment configuration updated.\n→ Triggering new deployment run."
       );
 
       await client.saveDeployment(parsedConfig);
@@ -75,7 +72,7 @@ export default class Edit extends BaseCommand {
 
       if (flags.output) {
         await this.save(parsedConfig, flags.output);
-        this.log(`Updated deployment configuration save to ${flags.output}`);
+        this.log(`→ Configuration saved to "${flags.output}"`);
       }
     });
   }

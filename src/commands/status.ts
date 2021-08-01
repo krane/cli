@@ -1,6 +1,5 @@
-import { cli } from "cli-ux";
 import { Container } from "@krane/common";
-
+import { cli } from "cli-ux";
 import BaseCommand from "../base";
 import { calculateTimeDiff } from "./../utils/time";
 
