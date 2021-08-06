@@ -49,7 +49,7 @@ export default class Start extends BaseCommand {
           DEPLOYMENT_ERROR: (event: DeploymentEvent, stopListening) => {
             cli.action.stop();
             this.log(
-              `\n✕ Failed to start \`${deploymentName}\`:\n${event.message}\n`
+              `\n❌ Failed to start \`${deploymentName}\`:\n${event.message}\n`
             );
             stopListening();
           },

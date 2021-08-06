@@ -54,7 +54,7 @@ export default class Remove extends BaseCommand {
           DEPLOYMENT_ERROR: (event: DeploymentEvent, stopListening) => {
             cli.action.stop();
             this.log(
-              `\n✕ Failed to remove \`${deploymentName}\`:\n${event.message}\n`
+              `\n❌ Failed to remove \`${deploymentName}\`:\n${event.message}\n`
             );
             stopListening();
           },

@@ -108,7 +108,7 @@ export default class Deploy extends BaseCommand {
           DEPLOYMENT_ERROR: (event: DeploymentEvent, stopListening) => {
             cli.action.stop();
             this.log(
-              `\n✕ Failed to deploy \`${config.name}\`:\n${event.message}\n`
+              `\n❌ Failed to deploy \`${config.name}\`:\n${event.message}\n`
             );
             stopListening();
           },

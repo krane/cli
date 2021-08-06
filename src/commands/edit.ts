@@ -1,6 +1,12 @@
-import { Config, Deployment } from "@krane/common";
+import {
+  Config,
+  Deployment,
+  DeploymentEvent,
+  KraneClient,
+} from "@krane/common";
 import { flags } from "@oclif/command";
 import { spawn, SpawnOptions } from "child_process";
+import { cli } from "cli-ux";
 import * as fs from "fs";
 import { isEqual } from "lodash";
 import * as path from "path";
@@ -63,12 +69,18 @@ export default class Edit extends BaseCommand {
         return;
       }
 
-      this.log(
-        "→ Deployment configuration updated.\n→ Triggering new deployment run."
-      );
+      this.log("→ Deployment configuration updated... done");
+      this.log("→ Triggering new deployment... done");
 
-      await client.saveDeployment(parsedConfig);
-      await client.runDeployment(parsedConfig.name);
+      try {
+        await client.saveDeployment(parsedConfig);
+        await this.subscribeToDeploymentEvents(parsedConfig, client);
+        await client.runDeployment(parsedConfig.name);
+      } catch (e) {
+        this.error(
+          `Unable to edit deployment ${e?.response?.data || e?.message}`
+        );
+      }
 
       if (flags.output) {
         await this.save(parsedConfig, flags.output);
@@ -89,5 +101,61 @@ export default class Edit extends BaseCommand {
     const serialized = JSON.stringify(config, null, 2);
     await writeFile(filepath, serialized, "utf8");
     return filepath;
+  }
+
+  private async subscribeToDeploymentEvents(
+    config: Config,
+    client: KraneClient
+  ): Promise<void> {
+    return new Promise((resolve, reject) => {
+      client.subscribeToDeploymentEvents({
+        deployment: config.name,
+        onListening: resolve,
+        onError: reject,
+        eventHandlers: {
+          DEPLOYMENT_SETUP: (event: DeploymentEvent) => {
+            cli.action.stop();
+            cli.action.start(`→ ${event.message}`);
+          },
+          PULL_IMAGE: (event: DeploymentEvent) => {
+            // Skip displaying docker pull image
+            // metadata events since they are VERY noisy.
+            if (event.message.startsWith("{")) return;
+            cli.action.stop();
+            cli.action.start(`→ ${event.message}`);
+          },
+          CONTAINER_CREATE: (event: DeploymentEvent) => {
+            cli.action.stop();
+            cli.action.start(`→ ${event.message}`);
+          },
+          CONTAINER_START: (event: DeploymentEvent) => {
+            cli.action.stop();
+            cli.action.start(`→ ${event.message}`);
+          },
+          DEPLOYMENT_HEALTHCHECK: (event: DeploymentEvent) => {
+            cli.action.stop();
+            cli.action.start(`→ ${event.message}`);
+          },
+          DEPLOYMENT_CLEANUP: (event: DeploymentEvent) => {
+            cli.action.stop();
+            cli.action.start(`→ ${event.message}`);
+          },
+          DEPLOYMENT_DONE: (event: DeploymentEvent, stopListening) => {
+            cli.action.stop();
+            cli.action.start(`→ ${event.message}`);
+            cli.action.stop();
+            this.log(`\n✅ \`${config.name}\` was succesfully updated.`);
+            stopListening();
+          },
+          DEPLOYMENT_ERROR: (event: DeploymentEvent, stopListening) => {
+            cli.action.stop();
+            this.log(
+              `\n❌ Failed to deploy \`${config.name}\`:\n${event.message}\n`
+            );
+            stopListening();
+          },
+        },
+      });
+    });
   }
 }

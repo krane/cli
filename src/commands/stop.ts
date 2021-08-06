@@ -49,7 +49,7 @@ export default class Stop extends BaseCommand {
           DEPLOYMENT_ERROR: (event: DeploymentEvent, stopListening) => {
             cli.action.stop();
             this.log(
-              `\n✕ Failed to stop \`${deploymentName}\`:\n${event.message}\n`
+              `\n❌ Failed to stop \`${deploymentName}\`:\n${event.message}\n`
             );
             stopListening();
           },
