@@ -100,7 +100,7 @@ export default class Deploy extends BaseCommand {
               "Visit https://krane.sh to learn how to configure a deployment alias",
             ];
             this.log(
-              `\n✅ \`${config.name}\` was succesfully deployed to:\n🔗 ${deploymentURLs}
+              `\n✅ \`${config.name}\` was succesfully deployed!\n🔗 ${deploymentURLs}
               \nTo view the status of \`${config.name}\` run:\n$ krane status ${config.name}`
             );
             stopListening();
