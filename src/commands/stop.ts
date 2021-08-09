@@ -1,3 +1,5 @@
+import { DeploymentEvent, KraneClient } from "@krane/common";
+import { cli } from "cli-ux";
 import BaseCommand from "../base";
 
 export default class Stop extends BaseCommand {
@@ -17,9 +19,42 @@ export default class Stop extends BaseCommand {
     const client = await this.getKraneClient();
 
     try {
+      await this.subscribeToDeploymentEvents(args.deployment, client);
       await client.stopDeployment(args.deployment);
     } catch (e) {
-      this.error(e?.response?.data ?? "Unable to stop deployment");
+      this.error(`Unable to stop ${e?.response?.data || e?.message}`);
     }
+  }
+
+  private async subscribeToDeploymentEvents(
+    deploymentName: string,
+    client: KraneClient
+  ): Promise<void> {
+    return new Promise((resolve, reject) => {
+      client.subscribeToDeploymentEvents({
+        deployment: deploymentName,
+        onListening: resolve,
+        onError: reject,
+        eventHandlers: {
+          CONTAINER_STOP: (event: DeploymentEvent) => {
+            cli.action.stop();
+            cli.action.start(`→ ${event.message}`);
+          },
+          DEPLOYMENT_DONE: (event: DeploymentEvent, stopListening) => {
+            cli.action.stop();
+            cli.action.start(`→ ${event.message}`);
+            cli.action.stop();
+            stopListening();
+          },
+          DEPLOYMENT_ERROR: (event: DeploymentEvent, stopListening) => {
+            cli.action.stop();
+            this.log(
+              `\n❌ Failed to stop \`${deploymentName}\`:\n${event.message}\n`
+            );
+            stopListening();
+          },
+        },
+      });
+    });
   }
 }
