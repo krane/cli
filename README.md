@@ -4,7 +4,7 @@
 
 [![npm version](https://img.shields.io/npm/v/krane?color=#D0BB79&label=npm)](https://www.npmjs.com/package/krane)
 
-**Official Documentation:** https://www.krane.sh/#/docs/cli
+**Official Documentation:** https://docs.krane.sh/#/docs/cli
 
 ### Install
 
