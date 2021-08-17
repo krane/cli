@@ -23,23 +23,23 @@ npm update -g krane
 ### Examples
 
 ```sh
-# Display CLI usage and commands.
+# Display CLI usage and commands
 $ krane help 
 
-# Authenticate with a Krane instance.
+# Authenticate with a Krane instance
 $ krane login http://example.com:8500
 
-# List all deployments and their status.
+# List all deployments
 $ krane list 
 
-# Returns information about the containers for a deployment.
+# Returns information about the containers for a deployment
 $ krane status <deployment>
 
-# Read realtime logs for a deployment.
+# Stream realtime deployment logs
 $ krane logs <deployment>
 ```
 
-Checkout the [official docs site](https://www.krane.sh/#/docs/cli) for the complete list of available commands.
+Checkout the [official docs site](https://docs.krane.sh/#/docs/cli) for the complete list of available commands.
 
 ## Contributing
 
