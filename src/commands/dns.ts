@@ -40,7 +40,7 @@ export default class DNS extends BaseCommand {
       if (!deployment) {
         this.log(
           `0 aliases found for ${args.deployment}
-To configure deployment aliases visit: https://www.krane.sh/#/docs/deployment?id=alias`
+To configure deployment aliases visit: https://docs.krane.sh/#/docs/deployment?id=alias`
         );
         return;
       }

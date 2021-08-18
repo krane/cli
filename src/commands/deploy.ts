@@ -11,7 +11,7 @@ const readFile = util.promisify(fs.readFile);
 
 export default class Deploy extends BaseCommand {
   static description = `Create or re-run a deployment
-  Check out https://www.krane.sh/#/docs/deployment for additional documentation`;
+  Check out https://docs.krane.sh/#/docs/deployment for additional documentation`;
 
   static usage = "deploy -f /path/to/deployment.json";
 

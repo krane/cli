@@ -49,6 +49,10 @@ export default class Context extends BaseCommand {
 
     if (flags.endpoint) {
       this.ctx.setEndpoint(flags.endpoint);
+      const client = await this.getKraneClient();
+      if (!(await client.ping())) {
+        this.error(`Unreachable host '${flags.endpoint}'`);
+      }
     }
 
     if (flags.token) {

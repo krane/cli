@@ -6,7 +6,7 @@ import { Secret } from "@krane/common";
 
 export default class Secrets extends BaseCommand {
   static description = `Add, delete, or list deployment secrets
-  Check out https://www.krane.sh/#/docs/cli?id=secrets for additional documentation
+  Check out https://docs.krane.sh/#/docs/cli?id=secrets for additional documentation
   `;
 
   static examples = [
@@ -71,7 +71,7 @@ export default class Secrets extends BaseCommand {
       const secret = await client.addSecret(deploymentName, key, value);
       this.log(
         `\nSecret added ✅ \nYou can refer to this secret in your krane.json with the following alias: \n${secret?.alias} 
-        \nFor more details on configuring secrets checkout: \nhttps://www.krane.sh/#/deployment-configuration?id=secrets`
+        \nFor more details on configuring secrets checkout: \nhttps://docs.krane.sh/#/deployment-configuration?id=secrets`
       );
     } catch (e) {
       this.error(e?.response?.data ?? "Unable to add secret");
