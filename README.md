@@ -27,7 +27,7 @@ npm update -g krane
 $ krane help 
 
 # Authenticate with a Krane instance
-$ krane login http://example.com:8500
+$ krane login https://krane.example.com
 
 # List all deployments
 $ krane list 
