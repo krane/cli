@@ -32,9 +32,8 @@ export default class Login extends BaseCommand {
       );
     }
 
-    this.ctx.setEndpoint(endpoint);
     const client = await this.getKraneClient();
-    if (!(await client.ping())) {
+    if (!(await client.ping(endpoint))) {
       this.error(`Unreachable host '${endpoint}'`);
     }
     await this.ctx.save();
