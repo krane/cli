@@ -1,6 +1,6 @@
 <img src="https://github.com/krane/krane/blob/main/docs/assets/krane-wordmark.png?raw=true" width="350">
 
-> A command-line tool for managing insfrastructure running on [Krane](https://github.com/krane/krane).
+> A command-line tool for managing insfrastructure running on [Krane](https://github.com/krane/krane)
 
 [![npm version](https://img.shields.io/npm/v/krane?color=#D0BB79&label=npm)](https://www.npmjs.com/package/krane)
 
