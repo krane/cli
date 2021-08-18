@@ -14,7 +14,10 @@ export default class Login extends BaseCommand {
   Check out https://docs.krane.sh/#/docs/authentication for additional documentation
   `;
 
-  static examples = ["$ krane login", "$ krane login https://krane.example.com"];
+  static examples = [
+    "$ krane login",
+    "$ krane login https://krane.example.com",
+  ];
 
   static args = [{ name: "endpoint" }];
 
@@ -30,12 +33,11 @@ export default class Login extends BaseCommand {
     }
 
     this.ctx.setEndpoint(endpoint);
-    await this.ctx.save();
-
     const client = await this.getKraneClient();
     if (!(await client.ping())) {
       this.error(`Unreachable host '${endpoint}'`);
     }
+    await this.ctx.save();
 
     try {
       const { request_id, phrase: serverPhrase } = await client.login();
