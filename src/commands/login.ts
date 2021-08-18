@@ -1,14 +1,11 @@
 import cli from "cli-ux";
-
-import * as path from "path";
 import * as fs from "fs";
-import { promisify } from "util";
-
-import * as jwt from "jsonwebtoken";
 import * as inquirer from "inquirer";
-
-import { KraneStore } from "../store/KraneStore";
+import * as jwt from "jsonwebtoken";
+import * as path from "path";
+import { promisify } from "util";
 import BaseCommand from "../base";
+import { KraneStore } from "../store/KraneStore";
 
 const readFile = promisify(fs.readFile);
 
@@ -36,6 +33,9 @@ export default class Login extends BaseCommand {
     await this.ctx.save();
 
     const client = await this.getKraneClient();
+    if (!(await client.ping())) {
+      this.error(`Unreachable host '${endpoint}'`);
+    }
 
     try {
       const { request_id, phrase: serverPhrase } = await client.login();

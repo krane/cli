@@ -11,7 +11,7 @@
     "krane": "./bin/run"
   },
   "dependencies": {
-    "@krane/common": "0.5.8",
+    "@krane/common": "0.5.95",
     "@oclif/command": "^1.8.0",
     "@oclif/config": "^1.15.1",
     "@oclif/plugin-help": "^2.2.3",
