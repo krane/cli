@@ -1,5 +1,4 @@
 import { flags } from "@oclif/command";
-
 import BaseCommand from "../base";
 
 export default class Logs extends BaseCommand {
@@ -46,7 +45,7 @@ export default class Logs extends BaseCommand {
       if (e.type === "error") {
         this.log(
           `\n\n=================================\n
-          Error reading container logs:\n${e?.message}
+          Error reading container logs:\n${e}
           \n=================================\n\n`
         );
       }
